@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="{{config.locale}}">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>{{#meta.title}}{{meta.title}} - {{/meta.title}}{{config.site_title}}</title>
+  {{#meta.description}}<meta name="description" content="{{meta.description}}">{{/meta.description}}
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link rel="shortcut icon" href="{{config.base_url}}/favicon.ico">
+  <link rel="stylesheet" href="{{config.base_url}}/styles/bootstrap.min.css">
+  <link rel="stylesheet" href="{{config.base_url}}/styles/solarized_light.css">
+  <link rel="stylesheet" href="{{config.base_url}}/styles/raneto.css">
+  <link rel="stylesheet" href="{{config.base_url}}/styles/ghostdown.css">
+  {{#config.rtl_layout}}
+  <link rel="stylesheet" href="{{config.base_url}}/styles/raneto.rtl.css">
+  <link rel="stylesheet" href="{{config.base_url}}/styles/bootstrap-rtl.min.css">
+  {{/config.rtl_layout}}
+</head>
+<body class="{{body_class}}">
+
+  <!-- Header -->
+  <header class="header">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-sm-6">
+          <a href="{{config.base_url}}/" class="logo">{{config.site_title}}</a>
+        </div>
+        <div class="col-sm-6">
+          <form class="search-form form-inline pull-right" action="{{config.base_url}}/">
+            <div class="form-group">
+              <label class="sr-only" for="search">{{lang.global.search}}</label>
+              <input type="search" class="form-control" name="search" id="search" size="30" value="{{search}}" placeholder="{{lang.global.search}}">
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <div class="container-fluid">
+    {{{yield}}}
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container-fluid">
+      {{#config.copyright}}
+        <p class="copyright pull-right">{{{config.copyright}}}</p>
+      {{/config.copyright}}
+    </div>
+  </footer>
+
+  <!-- JavaScript -->
+  <script src="{{config.base_url}}/scripts/jquery.min.js"></script>
+  <script src="{{config.base_url}}/scripts/bootstrap.min.js"></script>
+  <script src="{{config.base_url}}/scripts/highlight.pack.min.js"></script>
+  <script src="{{config.base_url}}/scripts/fitvids.min.js"></script>
+  <script src="{{config.base_url}}/scripts/masonry.pkgd.min.js"></script>
+  <script src="{{config.base_url}}/scripts/ghostdown.js"></script>
+  <script src="{{config.base_url}}/scripts/raneto.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,23 @@
+{
+  "name": "spryker-shop-styleguide",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc -p .",
+    "watch": "tsc -w -p .",
+    "generate": "node ./dist/generator",
+    "start": "node ./dist/server"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@types/node": "^10.11.7",
+    "@types/ramda": "^0.25.39",
+    "fast-glob": "^2.2.3",
+    "inquirer": "^6.2.0",
+    "ramda": "^0.25.0",
+    "raneto": "^0.16.0",
+    "typescript": "^3.1.3"
+  }
+}
