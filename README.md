@@ -1,6 +1,6 @@
 # Spryker Shop Styleguide
 
-This module will automatically generate and serve a living styleguide for Spryker Shop atomic frontend.
+This npm module will automatically generate and serve a living styleguide for Spryker Shop atomic frontend.
 
 ## Installation
 
