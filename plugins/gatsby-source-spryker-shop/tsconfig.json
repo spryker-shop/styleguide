@@ -1,0 +1,29 @@
+{
+    "compilerOptions": {
+        "baseUrl": ".",
+        "outDir": "./dist",
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "target": "es2015",
+        "allowJs": true,
+        "sourceMap": true,
+        "noImplicitAny": false,
+        "removeComments": true,
+        "allowSyntheticDefaultImports": true,
+        "lib": [
+            "dom",
+            "es5",
+            "es6",
+            "es7"
+        ]
+    },
+    "files": [
+        "./src/node.ts"
+    ],
+    "include": [
+        "./src"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
+}

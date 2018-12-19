@@ -1,25 +1,49 @@
 # Spryker Shop Styleguide
 
-This npm module will automatically generate and serve a living styleguide for Spryker Shop atomic frontend.
+This repository contains an *alpha* version of Spryker Shop Styleguide.
+The application is based on [GatsbyJS](https://www.gatsbyjs.org/).
+
+## Requirements
+
+Use `yarn` instead of `npm` as recommended by GatsbyJS.
+Tested on `node` version 8.11 (see `.nvmrc` file in the repo).
 
 ## Installation
 
-To easily test/develop the application, download the repo and run `npm install`.
+To easily test/develop the application, download the repo and run `yarn install` from the root.
+Then move to `./plugins/gatsby-source-spryker-shop` and run again `yarn install` to setup our custom Spryker source plugin.
 Take a look at the following steps for the usage.
 
-## Usage
+## Configuration
 
-```bash
-# development
-npm run build
-npm run watch # will rebuild the server and generator source code
+Go to `./gatsby-config.js`:
 
-# navigation
-npm run generate # will generate the content for the styleguide
-# After running you will get a question:
-# ? Where is the project (root folder) you want to generate the styleguide for?
-# The answer might be a relative or absulte path to suite project root.
-
-npm run start # will start the server to navigate the styleguide
+```js
+    {
+      resolve: 'gatsby-source-spryker-shop',
+      options: {
+        projectRootAbsolutePath: '/absolute/path/to/suite/project', // change this property
+        componentPageTemplateRelativePath: 'src/templates/component.js'
+      }
+    }
 ```
 
+## Develop the plugin
+
+Go to `./plugins/gatsby-source-spryker-shop`:
+
+```bash
+yarn run build # will transpile the code once
+yarn run watch # will transpile the code for every change
+```
+
+## Navigate the styleguide
+
+Go to `./`:
+
+```bash
+yarn run develop
+```
+
+Follow the instrucion printed in the terminal to see the frontend and use GraphiQL.
+For more info about gatsby CLI, rely on the official [documentation here](https://www.gatsbyjs.org/docs/).
