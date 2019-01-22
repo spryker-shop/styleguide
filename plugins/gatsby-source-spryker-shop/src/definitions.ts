@@ -5,7 +5,6 @@
  */
 
 export type GatsbyOperations = any
-
 export type GatsbyOptions = any
 
 /**
@@ -71,6 +70,27 @@ export interface Component {
     }
 }
 
+export interface NavigationComponent {
+    name: string
+    path: string
+    slug: string
+}
+
+export interface NavigationType {
+    name: string
+    components: NavigationComponent[]
+}
+
+export interface NavigationModule {
+    name: string
+    types: NavigationType[]
+}
+
+export interface Navigation {
+    namespace: string
+    modules: NavigationModule[]
+}
+
 export enum NodeType {
     Module = 'SprykerModule',
     Component = 'SprykerComponent'
@@ -88,5 +108,5 @@ export interface NodeData {
 }
 
 export interface ModuleNodeData extends Module, NodeData { }
-
 export interface ComponentNodeData extends Component, NodeData { }
+export interface NavigationNodeData extends Navigation, NodeData { }

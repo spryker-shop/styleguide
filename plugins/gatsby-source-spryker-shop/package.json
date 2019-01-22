@@ -15,6 +15,7 @@
     "comment-parser": "^0.5.0",
     "fast-glob": "^2.2.4",
     "ramda": "^0.26.1",
+    "sassdoc": "^2.5.1",
     "showdown": "^1.9.0",
     "typescript": "~3.2.1"
   },

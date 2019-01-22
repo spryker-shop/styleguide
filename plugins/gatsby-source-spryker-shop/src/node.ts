@@ -1,6 +1,25 @@
-import { concat } from 'ramda';
+import {
+    concat,
+    groupBy,
+    mapObjIndexed,
+    filter,
+    values
+} from 'ramda';
 import { importModules, importAllComponentsForModule } from './importer';
-import { GatsbyOperations, GatsbyOptions, Module, ModuleNodeData, Component, ComponentNodeData } from './definitions';
+import {
+    GatsbyOperations,
+    GatsbyOptions,
+    Type,
+    Module,
+    ModuleNodeData,
+    Component,
+    ComponentNodeData,
+    Navigation,
+    NavigationModule,
+    NavigationComponent,
+    NavigationType,
+    NavigationNodeData
+} from './definitions';
 
 function createModuleNodeData(operations: GatsbyOperations, module: Module): ModuleNodeData {
     const id = operations.createNodeId(`spryker-module-${module.path}`);
@@ -36,18 +55,64 @@ function createComponentNodeData(operations: GatsbyOperations, component: Compon
     };
 }
 
+function createNavigationNodeData(operations: GatsbyOperations, navigation: Navigation): NavigationNodeData {
+    const id = operations.createNodeId(`spryker-navigation-${navigation.namespace}`);
+    const content = JSON.stringify(navigation);
+
+    return {
+        ...navigation,
+        id,
+        parent: null,
+        children: [],
+        internal: {
+            type: 'SprykerNavigation',
+            content,
+            contentDigest: operations.createContentDigest(navigation)
+        }
+    };
+}
+
 export async function sourceNodes(operations: GatsbyOperations, options: GatsbyOptions): Promise<void> {
     const { createNode } = operations.actions;
     const { projectRootAbsolutePath } = options;
-    const modules = importModules(projectRootAbsolutePath);
+
+    const modules: Module[] = importModules(projectRootAbsolutePath);
+    const components: Component[] = (await Promise.all(modules.map((module: Module) => importAllComponentsForModule(module))))
+        .reduce((previous: Component[], current: Component[]): Component[] => concat(previous, current));
+
+    // I ask forgivness for this part of code
+    // but I was in a hurry... :(
+    // refactor, please!
+    const navigations: Navigation[] = [{
+        namespace: 'SprykerShop',
+        modules: modules
+            .map(((module): NavigationModule => {
+                const componentsInModule = filter((component: Component) => component.module.path === module.path, components)
+                const componentsInModuleByType = groupBy((component: Component) => component.type)(componentsInModule);
+
+                return {
+                    name: module.name,
+                    types: values(mapObjIndexed((componentsByType: Component[], key: string): NavigationType => ({
+                        name: key,
+                        components: componentsByType.map((component: Component): NavigationComponent => ({
+                            name: component.name,
+                            path: component.path,
+                            slug: component.slug
+                        }))
+                    }), componentsInModuleByType))
+                }
+            }))
+    }];
 
     modules
         .map((module: Module) => createModuleNodeData(operations, module))
-        .map((moduleData: ModuleNodeData) => createNode(moduleData));
+        .forEach((moduleData: ModuleNodeData) => createNode(moduleData));
 
-    modules
-        .map((module: Module) => importAllComponentsForModule(module))
-        .reduce((previous: Component[], current: Component[]): Component[] => concat(previous, current))
+    components
         .map((component: Component) => createComponentNodeData(operations, component))
-        .map((componentData: ComponentNodeData) => createNode(componentData));
+        .forEach((componentData: ComponentNodeData) => createNode(componentData));
+
+    navigations
+        .map((navigation: Navigation) => createNavigationNodeData(operations, navigation))
+        .forEach((navigationData: NavigationNodeData) => createNode(navigationData));
 }

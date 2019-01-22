@@ -1,6 +1,6 @@
 module.exports = {
   siteMetadata: {
-    title: 'Gatsby Default Starter',
+    title: 'Spryker Styleguide',
   },
   plugins: [
     'gatsby-plugin-react-helmet',
@@ -32,6 +32,6 @@ module.exports = {
         componentPageTemplateRelativePath: 'src/templates/component.js'
       }
     },
-    'gatsby-plugin-postcss'
+    'gatsby-plugin-sass'
   ],
 }

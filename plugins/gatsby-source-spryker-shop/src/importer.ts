@@ -9,12 +9,16 @@ function getSlug(...fragments: string[]): string {
     return chain('/', fragments.map(trim).map(toLower));
 }
 
-function createComponent(module: Module, type: Type, path: string): Component {
+async function createComponent(module: Module, type: Type, path: string): Promise<Component> {
     const name = basename(path);
     const readmeFile = join(path, 'README.md');
     const twigFile = join(path, `${name}.twig`);
     const sassFile = join(path, `${name}.scss`);
     const typescriptFile = join(path, `${name}.ts`);
+
+    const twig = parser.genericCode(twigFile);
+    const sass = (await parser.sass(sassFile)) || [];
+    const typescript = parser.typescript(typescriptFile);
 
     return {
         name,
@@ -24,12 +28,13 @@ function createComponent(module: Module, type: Type, path: string): Component {
         module,
         readme: parser.markdown(readmeFile),
         api: {
-            twig: parser.genericCode(twigFile),
-            sass: parser.genericCode(sassFile),
-            typescript: parser.typescript(typescriptFile)
+            twig,
+            sass,
+            typescript
         }
     }
 }
+
 
 function createModule(namespace: string, path: string): Module {
     const name = basename(path);
@@ -48,16 +53,17 @@ export function importModules(projectRootPath: string): Module[] {
         .reduce((previous: Module[], current: Module[]): Module[] => concat(previous, current));
 }
 
-export function importTypedComponentsForModule(module: Module, type: Type): Component[] {
-    return glob(getGlobTypedComponentSettings(module, type)).map((path: string) => createComponent(module, type, path));
+export async function importTypedComponentsForModule(module: Module, type: Type): Promise<Component[]> {
+    const files = glob(getGlobTypedComponentSettings(module, type));
+    return Promise.all(files.map((path: string) => createComponent(module, type, path)));
 }
 
-export function importAllComponentsForModule(module: Module): Component[] {
+export async function importAllComponentsForModule(module: Module): Promise<Component[]> {
     return [
-        ...importTypedComponentsForModule(module, Type.Atom),
-        ...importTypedComponentsForModule(module, Type.Molecule),
-        ...importTypedComponentsForModule(module, Type.Organism),
-        ...importTypedComponentsForModule(module, Type.Template),
-        ...importTypedComponentsForModule(module, Type.View)
+        ...await importTypedComponentsForModule(module, Type.Atom),
+        ...await importTypedComponentsForModule(module, Type.Molecule),
+        ...await importTypedComponentsForModule(module, Type.Organism),
+        ...await importTypedComponentsForModule(module, Type.Template),
+        ...await importTypedComponentsForModule(module, Type.View)
     ]
 }

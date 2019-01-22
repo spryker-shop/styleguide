@@ -1,13 +1,13 @@
 import React from 'react'
 import { Link } from 'gatsby'
-import Layout from '../components/layout/layout'
+import Layout from '../components/layout'
 
 const IndexPage = () => (
   <Layout>
-    <h1>Hi people</h1>
-    <p>Welcome to your new Gatsby site.</p>
-    <p>Now go build something great.</p>
-    <Link to="/page-2/">Go to page 2</Link>
+    <section className="section content">
+      <h1>Hi folks!</h1>
+      <p>Welcome to your new Spryker Styleguide POC.</p>
+    </section>
   </Layout>
 )
 
