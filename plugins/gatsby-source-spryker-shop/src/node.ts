@@ -3,9 +3,13 @@ import {
     groupBy,
     mapObjIndexed,
     filter,
-    values
+    values,
+    flatten
 } from 'ramda';
-import { importModules, importAllComponentsForModule } from './importer';
+import {
+    importModules,
+    importAllComponentsForModule
+} from './importer';
 import {
     GatsbyOperations,
     GatsbyOptions,
@@ -72,17 +76,18 @@ function createNavigationNodeData(operations: GatsbyOperations, navigation: Navi
     };
 }
 
+// I ask forgivness for this part of code
+// but I was in a hurry... :(
+// refactor, please!
 export async function sourceNodes(operations: GatsbyOperations, options: GatsbyOptions): Promise<void> {
     const { createNode } = operations.actions;
-    const { projectRootAbsolutePath } = options;
+    const { projectRootAbsolutePath, typesToImport } = options;
 
     const modules: Module[] = importModules(projectRootAbsolutePath);
-    const components: Component[] = (await Promise.all(modules.map((module: Module) => importAllComponentsForModule(module))))
-        .reduce((previous: Component[], current: Component[]): Component[] => concat(previous, current));
+    const components: Component[] = Array.prototype.concat(
+        ...await Promise.all(modules.map((module: Module) => importAllComponentsForModule(module, typesToImport)))
+    );
 
-    // I ask forgivness for this part of code
-    // but I was in a hurry... :(
-    // refactor, please!
     const navigations: Navigation[] = [{
         namespace: 'SprykerShop',
         modules: modules
@@ -92,6 +97,7 @@ export async function sourceNodes(operations: GatsbyOperations, options: GatsbyO
 
                 return {
                     name: module.name,
+                    slug: module.slug,
                     types: values(mapObjIndexed((componentsByType: Component[], key: string): NavigationType => ({
                         name: key,
                         components: componentsByType.map((component: Component): NavigationComponent => ({

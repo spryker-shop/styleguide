@@ -1,8 +1,8 @@
 import React from 'react';
 import { graphql } from 'gatsby';
-import Layout from '../components/layout';
 import Preview from '../components/preview';
-import ApiTabs from '../components/api-tabs';
+import Usage from '../components/usage';
+import Tabs from '../components/api/tabs';
 
 export const query = graphql`
     query SiteComponentPage($slug: String!) {
@@ -12,15 +12,35 @@ export const query = graphql`
             module {
                 namespace
                 name
+                path
             }
             readme
             api {
-                sass {
-                    description
-                    context {
+                twig {
+                    defines {
                         name
-                        type
+                        contract
+                        declaration
+                    }
+                    blocks {
+                        name
+                    }
+                }
+                sass {
+                    variables {
+                        name
                         value
+                    }
+                    mixins {
+                        name
+                        arguments {
+                            name
+                            value
+                        }
+                        hasContent
+                    }
+                    modifiers {
+                        name
                     }
                 }
                 typescript {
@@ -36,6 +56,12 @@ export const query = graphql`
                             visibility
                             returnType
                             isAsync
+                            parameters {
+                                name
+                                type
+                                description
+                                isOptional
+                            }
                             tags {
                                 name
                                 description
@@ -47,29 +73,42 @@ export const query = graphql`
         }
     }
 `
-export default ({ data }) => (
-    <Layout>
-        <section className="section">
-            <Preview>
-                No preview yet available.
-            </Preview>
-            <nav class="breadcrumb">
-                <ul>
-                    <li><a href="#">{data.sprykerComponent.module.namespace}</a></li>
-                    <li><a href="#">{data.sprykerComponent.module.name}</a></li>
-                    <li><a href="#">{data.sprykerComponent.type}</a></li>
-                    <li class="is-active"><a href="#">{data.sprykerComponent.name}</a></li>
-                </ul>
-            </nav>
-        </section>
 
-        <article class="section">
-            <section
-                className="content"
-                dangerouslySetInnerHTML={{ __html: data.sprykerComponent.readme }}>
+const getReadme = (name, readme) => {
+    return readme || `<h1>${name}</h1>This component has no description.`;
+}
+
+export default ({ data }) => {
+    const component = data.sprykerComponent;
+
+    return (
+        <>
+            <section className="section">
+                <Preview>
+                    No preview yet available.
+                </Preview>
+
+                <nav class="breadcrumb">
+                    <ul>
+                        <li><a href="#">{component.module.namespace}</a></li>
+                        <li><a href="#">{component.module.name}</a></li>
+                    </ul>
+                </nav>
+
+                <h1 className="title is-size-2">
+                    {component.name}
+                    &nbsp;
+                    <span class="tag is-danger is-rounded is-uppercase">{component.type}</span>
+                </h1>
+
+                <article
+                    className="content"
+                    dangerouslySetInnerHTML={{ __html: getReadme(component.name, component.readme) }}>
+                </article>
+
+                <Usage component={component} />
+                <Tabs api={component.api} />
             </section>
-        </article>
-
-        <ApiTabs api={data.sprykerComponent.api} />
-    </Layout>
-)
+        </>
+    )
+}

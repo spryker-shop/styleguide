@@ -70,7 +70,7 @@ const typescriptCompilerOptions: ts.CompilerOptions = {
     target: ts.ScriptTarget.ES2015
 }
 
-function runDiagnosticsForProgram(program: ts.Program): void {
+function runDiagnosticsForProgram(program: ts.Program): MessageRegistry {
     const compilerDiagnostics = program.getSemanticDiagnostics();
     const registry: MessageRegistry = {};
 
@@ -99,12 +99,16 @@ function runDiagnosticsForProgram(program: ts.Program): void {
         ];
     });
 
+    return registry;
+}
+
+function printDiagnosticsForProgram(file: string, registry: MessageRegistry) {
+    console.log('\nParsing', basename(file));
+
     forEachObjIndexed((messages: string[], key: string) => {
         console.warn(dim(key));
         messages.forEach((message: string) => console.log(yellow(message)));
     }, registry);
-
-    console.log();
 }
 
 function runDiagnosticsForSourceFile(sourceFile: ts.SourceFile): void {
@@ -286,10 +290,9 @@ function getDescription(node: ts.Node): string {
 }
 
 export function parse(file: string): Api {
-    console.log('Parsing', basename(file));
-
     const program = ts.createProgram([file], typescriptCompilerOptions);
-    runDiagnosticsForProgram(program);
+    const output = runDiagnosticsForProgram(program);
+    // printDiagnosticsForProgram(file, output);
 
     const sourceFile = program.getSourceFile(file);
     runDiagnosticsForSourceFile(sourceFile);

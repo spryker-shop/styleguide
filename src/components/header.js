@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'gatsby';
 
-const Header = ({ title }) => (
+export default ({ title }) => (
     <header className="navbar is-fixed-top is-primary">
         <div className="container is-fullhd">
             <div className="navbar-brand">
@@ -10,5 +10,3 @@ const Header = ({ title }) => (
         </div>
     </header>
 )
-
-export default Header

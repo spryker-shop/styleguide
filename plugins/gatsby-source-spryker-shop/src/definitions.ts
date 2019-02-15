@@ -23,24 +23,6 @@ export interface GlobModuleSettings extends GlobSettings {
     namespace: string
 }
 
-export interface Tag {
-    tag: string
-    type: string
-    name: string
-    optional: boolean
-    description: string
-    line: number
-    source: string
-    default?: string
-}
-
-export interface Api {
-    tags: Tag[]
-    line: number
-    description: string
-    source: string
-}
-
 export enum Type {
     Atom = 'atom',
     Molecule = 'molecule',
@@ -83,6 +65,7 @@ export interface NavigationType {
 
 export interface NavigationModule {
     name: string
+    slug: string
     types: NavigationType[]
 }
 

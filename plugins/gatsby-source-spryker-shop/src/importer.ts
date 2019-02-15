@@ -1,24 +1,37 @@
 import { join, basename } from 'path';
-import { concat, trim, toLower, join as chain } from 'ramda';
+import { dim, magenta, cyan, green } from 'colors';
+import { concat, trim, toLower, join as joinString } from 'ramda';
 import { glob } from './glob';
 import { GlobModuleSettings, Type, Component, Module } from './definitions';
 import { getGlobModuleSettings, getGlobTypedComponentSettings } from './settings';
 import * as parser from './parser';
 
 function getSlug(...fragments: string[]): string {
-    return chain('/', fragments.map(trim).map(toLower));
+    return '/' + joinString('/', fragments.map(trim).map(toLower));
 }
 
 async function createComponent(module: Module, type: Type, path: string): Promise<Component> {
     const name = basename(path);
+    process.stdout.write(`- parsing ${dim(cyan(type))} ${cyan(name)}... `);
+
     const readmeFile = join(path, 'README.md');
     const twigFile = join(path, `${name}.twig`);
     const sassFile = join(path, `${name}.scss`);
     const typescriptFile = join(path, `${name}.ts`);
 
-    const twig = parser.genericCode(twigFile);
-    const sass = (await parser.sass(sassFile)) || [];
+    const readme = parser.markdown(readmeFile);
+    const twig = parser.twig(twigFile);
+    const sass = parser.sass(sassFile);
     const typescript = parser.typescript(typescriptFile);
+
+    const log = {
+        readme: !!readme ? green : dim,
+        twig: !!twig ? green : dim,
+        sass: !!sass ? green : dim,
+        typescript: !!typescript ? green : dim
+    };
+
+    console.log(log.readme('readme'), log.twig('twig'), log.sass('sass'), log.typescript('typescript'));
 
     return {
         name,
@@ -26,7 +39,7 @@ async function createComponent(module: Module, type: Type, path: string): Promis
         slug: getSlug(module.slug, type, name),
         type,
         module,
-        readme: parser.markdown(readmeFile),
+        readme,
         api: {
             twig,
             sass,
@@ -34,7 +47,6 @@ async function createComponent(module: Module, type: Type, path: string): Promis
         }
     }
 }
-
 
 function createModule(namespace: string, path: string): Module {
     const name = basename(path);
@@ -58,12 +70,9 @@ export async function importTypedComponentsForModule(module: Module, type: Type)
     return Promise.all(files.map((path: string) => createComponent(module, type, path)));
 }
 
-export async function importAllComponentsForModule(module: Module): Promise<Component[]> {
-    return [
-        ...await importTypedComponentsForModule(module, Type.Atom),
-        ...await importTypedComponentsForModule(module, Type.Molecule),
-        ...await importTypedComponentsForModule(module, Type.Organism),
-        ...await importTypedComponentsForModule(module, Type.Template),
-        ...await importTypedComponentsForModule(module, Type.View)
-    ]
+export async function importAllComponentsForModule(module: Module, types: Type[]): Promise<Component[]> {
+    console.log('Module', dim(magenta(module.namespace)), magenta(module.name));
+
+    const components = await Promise.all(types.map((type: Type) => importTypedComponentsForModule(module, type)));
+    return Array.prototype.concat(...components);
 }
