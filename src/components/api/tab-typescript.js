@@ -40,7 +40,7 @@ export default ({ api }) => exists(api) && exists(api, 'classes') && (
                                         <>
                                             <h6>Parameters</h6>
                                             <ul>
-                                                {method.parameters.map(parameter => (
+                                                {method.parameters.map((parameter, index) => (
                                                     <li key={`parameter-${index}`}>
                                                         <code>
                                                             {parameter.isOptional ? '[' : ''}

@@ -67,6 +67,7 @@ pre {
         top: $navbar-height;
         bottom: 0;
         max-width: 100%;
+        height: calc(100% - #{$navbar-height});
         transition: transform 0.3s;
         transform: translateX(-100%);
         z-index: 1;
