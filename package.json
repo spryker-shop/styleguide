@@ -1,7 +1,7 @@
 {
   "name": "@spryker/styleguide",
   "description": "Spryker Styleguide (based on gatsbyjs)",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": "Spryker Systems GmbH",
   "dependencies": {
     "bulma": "^0.7.2",
