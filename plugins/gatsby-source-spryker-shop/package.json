@@ -1,38 +1,12 @@
 {
   "name": "gatsby-source-spryker-shop",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "",
   "main": "index.js",
-  "scripts": {
-    "build": "tsc -p .",
-    "watch": "tsc -w -p .",
-    "postinstall": "tsc -p ."
-  },
-  "keywords": [],
   "author": "Spryker Systems GmbH",
   "license": "MIT",
   "dependencies": {
-    "comment-parser": "^0.5.0",
-    "fast-glob": "^2.2.4",
-    "parse-comments": "^1.0.0",
-    "ramda": "^0.26.1",
-    "sassdoc": "^2.5.1",
-    "sast": "^0.7.0",
-    "showdown": "^1.9.0",
-    "typescript": "~3.2.1",
-    "unist-util-filter": "^1.0.0",
-    "unist-util-find": "^1.0.1",
-    "unist-util-find-after": "^2.0.2",
-    "unist-util-find-all-after": "^1.0.2",
-    "unist-util-find-all-between": "^1.0.2",
-    "unist-util-find-before": "^2.0.2",
-    "unist-util-is": "^2.1.2",
-    "unist-util-visit": "^1.4.0",
-    "unist-util-visit-children": "^1.1.2",
-    "unist-util-visit-parents": "^2.0.1"
-  },
-  "devDependencies": {
-    "@types/node": "^10.12.6",
-    "@types/ramda": "^0.25.44"
+    "@spryker/frontend-sniffer": "https://github.com/spryker-sdk/frontend-sniffer",
+    "lodash": "^4.17.11"
   }
 }

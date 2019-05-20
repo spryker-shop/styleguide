@@ -3,6 +3,7 @@ import { graphql } from 'gatsby';
 import Preview from '../components/preview';
 import Usage from '../components/usage';
 import Tabs from '../components/api/tabs';
+import { exists } from '../helpers/object';
 
 export const query = graphql`
     query SiteComponentPage($slug: String!) {
@@ -81,7 +82,7 @@ const getReadme = (name, readme) => {
 export default ({ data }) => {
     const component = data.sprykerComponent;
 
-    return (
+    return exists(data, 'sprykerComponent') && (
         <>
             <section className="section">
                 <Preview>
@@ -101,10 +102,12 @@ export default ({ data }) => {
                     <span class="tag is-danger is-rounded is-uppercase">{component.type}</span>
                 </h1>
 
-                <article
-                    className="content"
-                    dangerouslySetInnerHTML={{ __html: getReadme(component.name, component.readme) }}>
-                </article>
+                {exists(component, 'readme') && (
+                    <article
+                        className="content"
+                        dangerouslySetInnerHTML={{ __html: getReadme(component.name, component.readme) }}>
+                    </article>
+                )}
 
                 <Usage component={component} />
                 <Tabs api={component.api} />
