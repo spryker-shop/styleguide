@@ -42,13 +42,13 @@ export default class extends React.Component {
 
         return (
             <section>
-                <h3 class="title is-size-4">Component API</h3>
+                <h3 className="title is-size-4">Component API</h3>
 
                 <div className="tabs">
                     <ul>
-                        <li className={this.currentTabLabel(API.TWIG)} onClick={this.showTab(API.TWIG)}><a>Twig</a></li>
-                        <li className={this.currentTabLabel(API.SASS)} onClick={this.showTab(API.SASS)}><a>Sass</a></li>
-                        <li className={this.currentTabLabel(API.TYPESCRIPT)} onClick={this.showTab(API.TYPESCRIPT)}><a>Typescript</a></li>
+                        <li className={this.currentTabLabel(API.TWIG)}><button className="tabs__button" onClick={this.showTab(API.TWIG)}>Twig</button></li>
+                        <li className={this.currentTabLabel(API.SASS)}><button className="tabs__button" onClick={this.showTab(API.SASS)}>Sass</button></li>
+                        <li className={this.currentTabLabel(API.TYPESCRIPT)}><button className="tabs__button" onClick={this.showTab(API.TYPESCRIPT)}>Typescript</button></li>
                     </ul>
                 </div>
 

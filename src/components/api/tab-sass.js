@@ -1,5 +1,5 @@
 import React from 'react';
-import MissingResourceMessage from '../missing-resource-message';
+// import MissingResourceMessage from '../missing-resource-message';
 import { exists } from '../../helpers/object';
 
 export default ({ api }) => exists(api) && (
@@ -9,7 +9,7 @@ export default ({ api }) => exists(api) && (
                 <h6>Variables</h6>
                 <ul>
                     {api.variables.map(variable => (
-                        <li>
+                        <li key={variable.name}>
                             <code>${variable.name}: {variable.value}</code>
                         </li>
                     ))}
@@ -22,7 +22,7 @@ export default ({ api }) => exists(api) && (
                 <h6>Mixins</h6>
                 <ul>
                     {api.mixins.map(mixin => (
-                        <li>
+                        <li key={mixin.name}>
                             <code>{mixin.name}(
                                     {exists(mixin, 'arguments') &&
                                     mixin.arguments.map(argument => `$${argument.name}${argument.value ? ': ' + argument.value : ''}`)
@@ -39,7 +39,7 @@ export default ({ api }) => exists(api) && (
                 <h6>Modifiers</h6>
                 <ul>
                     {api.modifiers.map(modifier => (
-                        <li>{modifier.name}</li>
+                        <li key={modifier.name}>{modifier.name}</li>
                     ))}
                 </ul>
             </>
