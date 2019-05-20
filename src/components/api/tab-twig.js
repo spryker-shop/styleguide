@@ -6,8 +6,8 @@ export default ({ api }) => exists(api) && (
         {exists(api, 'defines') && (
             <>
                 <h6>Defines</h6>
-                {api.defines.map(define => (
-                    <pre>
+                {api.defines.map((define, index) => (
+                    <pre key={`defines-${index}`}>
                         <code>
                             {define.declaration}
                         </code>
@@ -20,8 +20,8 @@ export default ({ api }) => exists(api) && (
             <>
                 <h6>Blocks</h6>
                 <ul>
-                    {api.blocks.map(block => (
-                        <li>{block.name}</li>
+                    {api.blocks.map((block, index) => (
+                        <li key={`${block.name}-${index}`}>{block.name}</li>
                     ))}
                 </ul>
             </>

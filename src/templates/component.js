@@ -1,6 +1,5 @@
 import React from 'react';
 import { graphql } from 'gatsby';
-import Preview from '../components/preview';
 import Usage from '../components/usage';
 import Tabs from '../components/api/tabs';
 import { exists } from '../helpers/object';
@@ -73,11 +72,11 @@ export const query = graphql`
             }
         }
     }
-`
+`;
 
 const getReadme = (name, readme) => {
     return readme || `<h1>${name}</h1>This component has no description.`;
-}
+};
 
 export default ({ data }) => {
     const component = data.sprykerComponent;
@@ -85,21 +84,17 @@ export default ({ data }) => {
     return exists(data, 'sprykerComponent') && (
         <>
             <section className="section">
-                <Preview>
-                    No preview yet available.
-                </Preview>
-
-                <nav class="breadcrumb">
+                <nav className="breadcrumb">
                     <ul>
-                        <li><a href="#">{component.module.namespace}</a></li>
-                        <li><a href="#">{component.module.name}</a></li>
+                        <li><span className="breadcrumb__item">{component.module.namespace}</span></li>
+                        <li><span className="breadcrumb__item">{component.module.name}</span></li>
                     </ul>
                 </nav>
 
                 <h1 className="title is-size-2">
                     {component.name}
                     &nbsp;
-                    <span class="tag is-danger is-rounded is-uppercase">{component.type}</span>
+                    <span className="tag is-danger is-rounded is-uppercase">{component.type}</span>
                 </h1>
 
                 {exists(component, 'readme') && (
