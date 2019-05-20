@@ -1,0 +1,306 @@
+$phone-large: 480px;
+$search-height: 70px;
+
+pre {
+    margin-bottom: $size-3;
+}
+
+.layout {
+    position: absolute;
+    top: $navbar-height;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    height: calc(100% - #{$navbar-height});
+    overflow: hidden;
+
+    &__container {
+        height: 100%;
+        margin-top: 0;
+        margin-bottom: 0;
+        padding: 0;
+        overflow: hidden;
+
+        &--overflow {
+            overflow-y: auto;
+        }
+
+        &--nav {
+            @include touch {
+                position: absolute;
+                right: 100%;
+                overflow: visible;
+            }
+        }
+    }
+}
+
+.navbar > .container .navbar-brand {
+    margin-left: 0;
+}
+
+.navbar-burger {
+    outline: none;
+    border: none;
+    background: inherit;
+
+    &:hover {
+        background-color: inherit;
+    }
+}
+
+.control {
+    &--search {
+        padding: 1rem;
+    }
+}
+
+.navigation-wrapper {
+    background-color: $white-bis;
+    height: 100%;
+
+    @include touch {
+        position: fixed;
+        left: 0;
+        top: $navbar-height;
+        bottom: 0;
+        max-width: 100%;
+        height: calc(100% - #{$navbar-height});
+        transition: transform 0.3s;
+        transform: translateX(-100%);
+        z-index: 1;
+
+        &.is-active {
+            transform: translateX(0);
+        }
+    }
+
+    @include until($phone-large) {
+        width: 100%;
+    }
+}
+
+.navigation {
+    overflow-y: auto;
+    max-height: calc(100% - #{$search-height});
+
+    &__header {
+        display: block;
+        width: 100%;
+        border-radius: 0;
+        border: none;
+        padding: 0.75rem 1rem;
+        background-color: transparent;
+        cursor: pointer;
+        outline: none;
+        text-align: left;
+        font-size: 1rem;
+
+        @include desktop {
+            padding: 1rem;
+        }
+
+        &:not(:last-of-type) {
+            border-bottom: 1px solid $white-ter;
+        }
+
+        &--active {
+            border-bottom: 1px solid $grey-lighter;
+            background-color: $white-ter;
+        }
+    }
+
+    &__content {
+        display: none;
+        width: 100%;
+        padding: 1rem;
+        background-color: $white-ter;
+        text-align: left;
+        font-size: 1rem;
+
+        &--active {
+            display: block;
+        }
+    }
+
+    &__item {
+        margin-left: 1rem;
+        padding-top: 0.5rem;
+        border-left: 1px solid $border;
+
+        &:last-of-type {
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+        }
+    }
+
+    &__link {
+        display: block;
+        position: relative;
+        left: -2px;
+        padding-left: 1rem;
+        border-left: 3px solid transparent;
+
+        &--active {
+            border-left-color: $red;
+            color: $text;
+        }
+    }
+}
+
+.navigation-overlay {
+    display: none;
+    opacity: 0;
+    visibility: hidden;
+
+    @include touch {
+        display: block;
+        position: fixed;
+        left: 0;
+        top: $navbar-height;
+        right: 0;
+        bottom: 0;
+        overflow-y: auto;
+        transition: opacity 0.3s, visibility 0.3s;
+        background-color: $modal-background-background-color;
+
+        &.is-active {
+            visibility: visible;
+            opacity: 1;
+        }
+    }
+
+    @include until($phone-large) {
+        display: none;
+    }
+}
+
+.is-hidden {
+    display: none;
+}
+
+.breadcrumb {
+    &__item {
+        align-items: center;
+        color: $breadcrumb-item-color;
+        display: flex;
+        justify-content: center;
+        padding: $breadcrumb-item-padding-vertical $breadcrumb-item-padding-horizontal;
+    }
+
+    li:first-child &__item {
+        padding-left: 0;
+    }
+}
+
+.tabs {
+    &__button {
+        align-items: center;
+        border: none;
+        background: rgba(0,0,0,0);
+        border-bottom-color: $tabs-border-bottom-color;
+        border-bottom-style: $tabs-border-bottom-style;
+        border-bottom-width: $tabs-border-bottom-width;
+        color: $tabs-link-color;
+        display: flex;
+        justify-content: center;
+        margin-bottom: -#{$tabs-border-bottom-width};
+        padding: $tabs-link-padding;
+        vertical-align: top;
+        font-size: 1rem;
+        line-height: 1.5;
+        outline: none;
+
+        &:focus {
+            color: $tabs-link-active-color;
+        }
+
+        &:hover {
+            cursor: pointer;
+            border-bottom-color: $tabs-link-hover-border-bottom-color;
+            color: $tabs-link-hover-color;
+        }
+    }
+
+    li.is-active {
+        .tabs__button {
+            border-bottom-color: $tabs-link-active-border-bottom-color;
+            color: $tabs-link-active-color;
+        }
+    }
+
+    &.is-boxed {
+        .tabs__button {
+            border: 1px solid transparent;
+            border-radius: $tabs-boxed-link-radius $tabs-boxed-link-radius 0 0;
+
+            &:hover {
+                background-color: $tabs-boxed-link-hover-background-color;
+                border-bottom-color: $tabs-boxed-link-hover-border-bottom-color;
+            }
+        }
+
+        li.is-active {
+            .tabs__button {
+                background-color: $tabs-boxed-link-active-background-color;
+                border-color: $tabs-boxed-link-active-border-color;
+                border-bottom-color: $tabs-boxed-link-active-border-bottom-color !important;
+            }
+        }
+    }
+
+    &.is-toggle {
+        .tabs__button {
+            border-color: $tabs-toggle-link-border-color;
+            border-style: $tabs-toggle-link-border-style;
+            border-width: $tabs-toggle-link-border-width;
+            margin-bottom: 0;
+            position: relative;
+
+            &:hover {
+                background-color: $tabs-toggle-link-hover-background-color;
+                border-color: $tabs-toggle-link-hover-border-color;
+                z-index: 2;
+            }
+        }
+
+        li {
+            &:first-child .tabs__button {
+                border-radius: $tabs-toggle-link-radius 0 0 $tabs-toggle-link-radius;
+            }
+
+            &:last-child .tabs__button {
+                border-radius: 0 $tabs-toggle-link-radius $tabs-toggle-link-radius 0;
+            }
+
+            &.is-active .tabs__button {
+                background-color: $tabs-toggle-link-active-background-color;
+                border-color: $tabs-toggle-link-active-border-color;
+                color: $tabs-toggle-link-active-color;
+                z-index: 1;
+            }
+        }
+
+        &.is-toggle-rounded {
+            li {
+                &:first-child .tabs__button {
+                    border-bottom-left-radius: $radius-rounded;
+                    border-top-left-radius: $radius-rounded;
+                    padding-left: 1.25em;
+                }
+
+                &:last-child .tabs__button {
+                    border-bottom-right-radius: $radius-rounded;
+                    border-top-right-radius: $radius-rounded;
+                    padding-right: 1.25em;
+                }
+            }
+        }
+    }
+}
+
+.markered {
+    background-color: #ffff00;
+}
