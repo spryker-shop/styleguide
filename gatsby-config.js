@@ -34,13 +34,7 @@ module.exports = {
         {
             resolve: 'gatsby-source-spryker-shop',
             options: {
-                projectRootAbsolutePath: '/Users/ilmente/Dev/suite-nonsplit/project',
-                componentPageTemplateRelativePath: 'src/templates/component.js',
-                typesToImport: [
-                    'atom',
-                    'molecule',
-                    'organism'
-                ]
+                projectRootAbsolutePath: '/Users/ilmente/Dev/suite-nonsplit/project'
             }
         }
     ]
