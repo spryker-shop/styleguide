@@ -28,7 +28,8 @@ async function sourceNodes(operations, options) {
         createNavigationSectionNode('application', createNavigationNodesFromApplication(applicationFiles)),
         createNavigationSectionNode('styles', createNavigationNodesFromStyles(styleSections)),
         createNavigationSectionNode('components', [
-            ...createNavigationNodesFromComponents(components)
+            ...createNavigationNodesFromComponents(components) // SprykerShop namespace
+            // add project namespace here
         ])
     ];
 
@@ -36,7 +37,7 @@ async function sourceNodes(operations, options) {
         ...applicationFiles.map(file => createNodeData(operations, 'SprykerApplicationFile', file.path, file)),
         ...styleSections.map(section => createNodeData(operations, 'SprykerStyleSection', section.type, section)),
         ...components.map(component => createNodeData(operations, 'SprykerComponent', component.id, component)),
-        ...navigation.map(node => createNodeData(operations, 'SprykerNavigation', node.namespace, node))
+        ...navigation.map(node => createNodeData(operations, 'SprykerNavigation', node.name, node))
     ];
 
     nodesData.forEach(nodeData => createNode(nodeData));
