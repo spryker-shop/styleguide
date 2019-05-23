@@ -1,8 +1,7 @@
 import React from 'react';
-// import MissingResourceMessage from '../missing-resource-message';
 import { exists } from '../../helpers/object';
 
-export default ({ api }) => exists(api) && (
+export default ({ api }) => (
     <div className='content'>
         {exists(api, 'variables') && (
             <>
@@ -40,6 +39,23 @@ export default ({ api }) => exists(api) && (
                 <ul>
                     {api.modifiers.map(modifier => (
                         <li key={modifier.name}>{modifier.name}</li>
+                    ))}
+                </ul>
+            </>
+        )}
+
+        {exists(api, 'functions') && (
+            <>
+                <h6>Functions</h6>
+                <ul>
+                    {api.functions.map((functionItem, index) => (
+                        <li key={`${functionItem.name}-${index}`}>
+                            <code>{functionItem.name}(
+                                {exists(functionItem, 'arguments') &&
+                                functionItem.arguments.map(argument => `$${argument.name}`)
+                                })
+                            </code>
+                        </li>
                     ))}
                 </ul>
             </>

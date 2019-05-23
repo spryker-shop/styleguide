@@ -17,12 +17,13 @@ const query = graphql`
             }
         }
         sprykerNavigation(namespace: {eq: "SprykerShop"}) {
+            id
             namespace
             modules {
-                name
                 slug
+                moduleName
                 types {
-                    name
+                    typeName
                     components {
                         name
                         slug

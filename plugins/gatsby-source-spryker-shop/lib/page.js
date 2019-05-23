@@ -1,5 +1,5 @@
 const { resolve } = require('path');
-const { createSlug } = require('./shared');
+const { createSlugForComponent } = require('./shared');
 
 const query = `
     {
@@ -18,7 +18,7 @@ const query = `
 `;
 
 function createPageData(node, componentPageTemplateRelativePath) {
-    const slug = createSlug(node);
+    const slug = createSlugForComponent(node.namespace, node.module, node.type, node.name);
 
     return {
         path: slug,

@@ -5,7 +5,7 @@ import Highlighter from 'react-highlight-words';
 
 export default class extends React.Component {
     state = {
-        active: this.props.location.pathname,
+        active: this.props.location.pathname.replace(/^\//, ''),
         activeAll: false,
         list: this.props.listOfModules.modules,
         searchFilter: '',
@@ -21,7 +21,7 @@ export default class extends React.Component {
 
     activeContent = (slug) => this.toggleClass(slug, 'navigation__content--active');
 
-    toggleClass = (slug, activeClass) => ((this.state.active.indexOf(slug) === 0) || this.state.activeAll) ? activeClass : '';
+    toggleClass = (slug, activeClass) => (this.state.active.startsWith(slug) || this.state.activeAll) ? activeClass : '';
 
     filterList = (event) => {
         const initialList = this.props.listOfModules.modules;
@@ -49,7 +49,7 @@ export default class extends React.Component {
 
     findInArray = (list, search) => {
         return list.filter((item) => {
-            if (this.isMatched(item.name, search)) {
+            if (this.isMatched(item.moduleName, search)) {
                 return true;
             }
 
@@ -78,23 +78,23 @@ export default class extends React.Component {
                     </div>
                     <aside className='navigation'>
                         {this.state.list.map(module => exists(module, 'types') && (
-                            <div key={module.name}>
+                            <div key={module.moduleName}>
                                 <button className={`navigation__header ${this.activeHeader(module.slug)}`} onClick={this.activate(module.slug)}>
                                     <Highlighter
                                         highlightClassName='markered'
                                         searchWords={[this.state.searchFilter]}
                                         autoEscape={true}
-                                        textToHighlight={module.name}
+                                        textToHighlight={module.moduleName}
                                     />
                                 </button>
                                 <ul className={`navigation__content ${this.activeContent(module.slug)}`}>
                                     {module.types.map(type => exists(type, 'components') && (
-                                        <li key={`${module.name}-${type.name}`}>
-                                            <em className='is-capitalized'>{type.name}s</em>
+                                        <li key={`${module.module}-${type.typeName}`}>
+                                            <em className='is-capitalized'>{type.typeName}</em>
                                             <ul>
                                                 {type.components.map(component => (
                                                     <li key={component.name} className='navigation__item'>
-                                                        <Link to={component.slug} className='navigation__link' activeClassName='navigation__link--active' onClick={toggleSidebar}>
+                                                        <Link to={`/${component.slug}`} className='navigation__link' activeClassName='navigation__link--active' onClick={toggleSidebar}>
                                                             <Highlighter
                                                                 highlightClassName='markered'
                                                                 searchWords={[this.state.searchFilter]}

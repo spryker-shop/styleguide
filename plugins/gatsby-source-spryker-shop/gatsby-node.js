@@ -1,4 +1,7 @@
+const { sourceNodes } = require('./lib/node');
+const { createPages } = require('./lib/page');
+
 module.exports = {
-    ...require('./lib/node'),
-    ...require('./lib/page')
+    sourceNodes,
+    createPages
 }

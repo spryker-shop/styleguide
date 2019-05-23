@@ -1,6 +1,22 @@
 const { groupBy, keys } = require('lodash');
 const { analyze } = require('@spryker/frontend-sniffer/api');
-const { createSlug } = require('./shared');
+const { createSlugForComponent, createSlugForModule } = require('./shared');
+
+function sortBy(propertyName) {
+    return function compare(a, b) {
+        const nameA = a[propertyName].toLowerCase();
+        const nameB = b[propertyName].toLowerCase();
+
+        if (nameA < nameB) {
+            return -1;
+        }
+        if (nameA > nameB) {
+            return 1;
+        }
+
+        return 0;
+    }
+}
 
 function createNavigation(components) {
     const componentsByNamespace = groupBy(components, 'namespace');
@@ -8,26 +24,27 @@ function createNavigation(components) {
     return keys(componentsByNamespace).map(namespace => {
         const componentsByModule = groupBy(componentsByNamespace[namespace], 'module');
 
-        const modules = keys(componentsByModule).map(module => {
-            const componentsByType = groupBy(componentsByModule[module], 'type');
+        const modules = keys(componentsByModule).map(moduleName => {
+            const componentsByType = groupBy(componentsByModule[moduleName], 'type');
 
-            const types = keys(componentsByType).map(type => {
-                const components = componentsByType[type].map(component => ({
+            const types = keys(componentsByType).map(typeName => {
+                const components = componentsByType[typeName].map(component => ({
                     ...component,
-                    slug: createSlug(component)
-                }))
+                    slug: createSlugForComponent(namespace, moduleName, typeName, component.name)
+                })).sort(sortBy('name'));
 
                 return {
-                    type,
+                    typeName,
                     components
                 }
-            })
+            }).sort(sortBy('typeName'));
 
             return {
-                module,
+                moduleName,
+                slug: createSlugForModule(namespace, moduleName),
                 types
             }
-        })
+        }).sort(sortBy('moduleName'));
 
         return {
             namespace,
@@ -59,13 +76,13 @@ async function sourceNodes(operations, options) {
     const nodesData = [
         ...applicationFiles.map(file => createNodeData(operations, 'SprykerApplicationFile', file.path, file)),
         ...styleSections.map(section => createNodeData(operations, 'SprykerStyleSection', section.type, section)),
-        ...components.map(component => createNodeData(operations, 'SprykerComponent', component.path, component)),
+        ...components.map(component => createNodeData(operations, 'SprykerComponent', component.id, component)),
         ...navigation.map(node => createNodeData(operations, 'SprykerNavigation', node.namespace, node))
-    ]
+    ];
 
     nodesData.forEach(nodeData => createNode(nodeData));
 }
 
 module.exports = {
     sourceNodes
-}
+};

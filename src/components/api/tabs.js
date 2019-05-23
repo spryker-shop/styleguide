@@ -1,25 +1,40 @@
 import React from 'react';
-import MissingResourceMessage from '../missing-resource-message';
 import TwigTab from './tab-twig';
 import SassTab from './tab-sass';
 import TypescriptTab from './tab-typescript';
 
 const API = {
-    TWIG: 'twig',
-    SASS: 'sass',
-    TYPESCRIPT: 'typescript'
-}
+    TWIG: 'Twig',
+    SASS: 'Sass',
+    TYPESCRIPT: 'Typescript'
+};
 
 export default class extends React.Component {
     state = {
-        activeTab: API.TWIG
+        activeTab: API.TWIG,
+    };
+
+    components = {
+        twig: TwigTab,
+        sass: SassTab,
+        typescript: TypescriptTab,
+    };
+
+    componentDidMount() {
+        this.setState({
+            activeTab: this.findActiveTab(this.props.api)
+        });
     }
 
+    findActiveTab = (listOfTabs) => {
+        return listOfTabs.twig.exists ? API.TWIG : API.SASS;
+    };
+
     showTab = (activeTab) => () => {
-        this.setState(state => ({
+        this.setState({
             activeTab
-        }))
-    }
+        })
+    };
 
     currentTabLabel = (tab) => {
         if (this.state.activeTab === tab) {
@@ -27,7 +42,7 @@ export default class extends React.Component {
         }
 
         return '';
-    }
+    };
 
     currentTab = (tab) => {
         if (this.state.activeTab === tab) {
@@ -35,10 +50,30 @@ export default class extends React.Component {
         }
 
         return 'is-hidden';
-    }
+    };
+
+    filterTabs = (tabs) => tabs.filter(tab => tab.content.exists);
+
+    mapContentComponents = (name, api) => {
+        const TagName = this.components[name.toLowerCase()];
+        return <TagName api={api} />
+    };
 
     render() {
-        const { twig, sass, typescript } = this.props.api;
+        const tabList = [
+            {
+                name: API.TWIG,
+                content: this.props.api.twig,
+            },
+            {
+                name: API.SASS,
+                content: this.props.api.sass,
+            },
+            {
+                name: API.TYPESCRIPT,
+                content: this.props.api.typescript,
+            },
+        ];
 
         return (
             <section>
@@ -46,32 +81,17 @@ export default class extends React.Component {
 
                 <div className="tabs">
                     <ul>
-                        <li className={this.currentTabLabel(API.TWIG)}><button className="tabs__button" onClick={this.showTab(API.TWIG)}>Twig</button></li>
-                        <li className={this.currentTabLabel(API.SASS)}><button className="tabs__button" onClick={this.showTab(API.SASS)}>Sass</button></li>
-                        <li className={this.currentTabLabel(API.TYPESCRIPT)}><button className="tabs__button" onClick={this.showTab(API.TYPESCRIPT)}>Typescript</button></li>
+                        {this.filterTabs(tabList).map((tab) => (
+                            <li key={tab.name} className={this.currentTabLabel(tab.name)}><button className="tabs__button" onClick={this.showTab(tab.name)}>{tab.name}</button></li>
+                        ))}
                     </ul>
                 </div>
 
-                <div className={this.currentTab(API.TWIG)}>
-                    <MissingResourceMessage resource={twig}>
-                        There are no {API.TWIG} API for this component.
-                    </MissingResourceMessage>
-                    <TwigTab api={twig} />
-                </div>
-
-                <div className={this.currentTab(API.SASS)}>
-                    <MissingResourceMessage resource={sass}>
-                        There are no {API.SASS} API for this component.
-                    </MissingResourceMessage>
-                    <SassTab api={sass} />
-                </div>
-
-                <div className={this.currentTab(API.TYPESCRIPT)}>
-                    <MissingResourceMessage resource={typescript}>
-                        There are no {API.TYPESCRIPT} API for this component.
-                    </MissingResourceMessage>
-                    <TypescriptTab api={typescript} />
-                </div>
+                {this.filterTabs(tabList).map((tab) => (
+                    <div key={`${tab.name}-content`} className={this.currentTab(tab.name)}>
+                        {this.mapContentComponents(tab.name, tab.content.api)}
+                    </div>
+                ))}
             </section>
         )
     }

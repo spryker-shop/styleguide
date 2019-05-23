@@ -1,15 +1,15 @@
 import React from 'react';
 import { exists } from '../../helpers/object';
 
-export default ({ api }) => exists(api) && (
+export default ({ api }) => (
     <div className='content'>
-        {exists(api, 'defines') && (
+        {exists(api, 'definitions') && (
             <>
                 <h6>Defines</h6>
-                {api.defines.map((define, index) => (
-                    <pre key={`defines-${index}`}>
+                {api.definitions.map((definition, index) => (
+                    <pre key={`definitions-${index}`}>
                         <code>
-                            {define.declaration}
+                            {definition.declaration}
                         </code>
                     </pre>
                 ))}
