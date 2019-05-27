@@ -56,7 +56,7 @@ export default class extends React.Component {
 
     mapContentComponents = (name, api) => {
         const TagName = this.components[name.toLowerCase()];
-        return <TagName api={api} />
+        return <TagName api={api.external} />
     };
 
     render() {

@@ -25,13 +25,15 @@ export const query = graphql`
                     exists
                     name
                     api {
-                        definitions {
-                            name
-                            contract
-                            declaration
-                        }
-                        blocks {
-                            name
+                        external {
+                            definitions {
+                                name
+                                contract
+                                declaration
+                            }
+                            blocks {
+                                name
+                            }
                         }
                     }
                 }
@@ -39,25 +41,27 @@ export const query = graphql`
                     exists
                     name
                     api {
-                        variables {
-                            name
-                            value
-                        }
-                        mixins {
-                            name
-                            arguments {
+                        external {
+                            variables {
                                 name
                                 value
                             }
-                            hasContent
-                        }
-                        modifiers {
-                            name
-                        }
-                        functions {
-                            name
-                            arguments {
+                            mixins {
                                 name
+                                arguments {
+                                    name
+                                    value
+                                }
+                                hasContent
+                            }
+                            modifiers {
+                                name
+                            }
+                            functions {
+                                name
+                                arguments {
+                                    name
+                                }
                             }
                         }
                     }
@@ -66,27 +70,29 @@ export const query = graphql`
                     exists
                     name
                     api {
-                        classes {
-                            name
-                            tags {
+                        external {
+                            classes {
                                 name
-                                description
-                            }
-                            methods {
-                                name
-                                description
-                                visibility
-                                returnType
-                                isAsync
-                                parameters {
-                                    name
-                                    type
-                                    description
-                                    isOptional
-                                }
                                 tags {
                                     name
                                     description
+                                }
+                                methods {
+                                    name
+                                    description
+                                    visibility
+                                    returnType
+                                    extractAsync
+                                    parameters {
+                                        name
+                                        type
+                                        description
+                                        isOptional
+                                    }
+                                    tags {
+                                        name
+                                        description
+                                    }
                                 }
                             }
                         }

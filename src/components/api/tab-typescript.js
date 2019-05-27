@@ -28,7 +28,7 @@ export default ({ api }) => exists(api, 'classes') && (
                         <ul>
                             {singleClass.methods.map((method, index) => (
                                 <li key={`method-${index}`}>
-                                    <code>{method.visibility} {method.isAsync ? 'async' : ''} {method.name}(
+                                    <code>{method.visibility} {method.extractAsync ? 'async' : ''} {method.name}(
                                         {exists(method, 'parameters') && method.parameters.map(
                                             parameter => `${parameter.name}${parameter.isOptional ? '?' : ''}: ${parameter.type}`
                                         ).join(', ')}

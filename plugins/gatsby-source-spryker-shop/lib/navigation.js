@@ -3,6 +3,7 @@ const { createSlug, sortStringsBy } = require('./shared/util');
 
 function createNavigationSectionNode(name, nodes) {
     return {
+        slug: createSlug(name),
         name,
         nodes
     }
@@ -20,9 +21,7 @@ function createNavigationNode(label, slug, isPage, children = null) {
     }
 }
 
-function createNavigationNodesFromApplication(applicationFiles) {
-    const slugBase = 'application';
-
+function createNavigationNodesFromApplication(applicationFiles, slugBase) {
     return applicationFiles.map(applicationFile => createNavigationNode(
         applicationFile.name,
         createSlug(slugBase, applicationFile.name),
@@ -30,18 +29,26 @@ function createNavigationNodesFromApplication(applicationFiles) {
     ))
 }
 
-function createNavigationNodesFromStyles(styles) {
-    const slugBase = 'styles';
+function createNavigationNodesFromStyles(styles, slugBase) {
+    return styles.sort(sortStringsBy('type')).map(styleType => {
+        const styles = styleType.files
+            .sort(sortStringsBy('name'))
+            .map(style => createNavigationNode(
+                style.name,
+                createSlug(slugBase, styleType.type, style.name),
+                true,
+            ));
 
-    return styles.map(style => createNavigationNode(
-        style.type,
-        createSlug(slugBase, style.type),
-        true
-    ))
+        return createNavigationNode(
+            styleType.type,
+            createSlug(slugBase, styleType.type),
+            false,
+            styles,
+        );
+    });
 }
 
-function createNavigationNodesFromComponents(components) {
-    const slugBase = 'components';
+function createNavigationNodesFromComponents(components, slugBase) {
     const componentsByNamespace = groupBy(components, 'namespace');
 
     return keys(componentsByNamespace)
@@ -63,7 +70,7 @@ function createNavigationNodesFromComponents(components) {
                                     component.name,
                                     createSlug(slugBase, namespace, moduleName, typeName, component.name),
                                     true
-                                ))
+                                ));
 
                             return createNavigationNode(
                                 typeName,
@@ -71,7 +78,7 @@ function createNavigationNodesFromComponents(components) {
                                 false,
                                 components
                             )
-                        })
+                        });
 
                     return createNavigationNode(
                         moduleName,
@@ -79,7 +86,7 @@ function createNavigationNodesFromComponents(components) {
                         false,
                         types
                     )
-                })
+                });
 
             return createNavigationNode(
                 namespace,
@@ -96,4 +103,4 @@ module.exports = {
     createNavigationNodesFromApplication,
     createNavigationNodesFromStyles,
     createNavigationNodesFromComponents
-}
+};

@@ -6,6 +6,12 @@ const {
     createNavigationNodesFromComponents
 } = require('./navigation');
 
+const SECTIONS = {
+    application: 'Application',
+    styles: 'Styles',
+    components: 'Components',
+};
+
 function createNodeData(operations, type, id, entity) {
     return {
         ...entity,
@@ -25,10 +31,10 @@ async function sourceNodes(operations, options) {
     const { applicationFiles, styleSections, components } = await analyze();
 
     const navigation = [
-        createNavigationSectionNode('application', createNavigationNodesFromApplication(applicationFiles)),
-        createNavigationSectionNode('styles', createNavigationNodesFromStyles(styleSections)),
-        createNavigationSectionNode('components', [
-            ...createNavigationNodesFromComponents(components) // SprykerShop namespace
+        createNavigationSectionNode(SECTIONS.application, createNavigationNodesFromApplication(applicationFiles, SECTIONS.application)),
+        createNavigationSectionNode(SECTIONS.styles, createNavigationNodesFromStyles(styleSections, SECTIONS.styles)),
+        createNavigationSectionNode(SECTIONS.components, [
+            ...createNavigationNodesFromComponents(components, SECTIONS.components) // SprykerShop namespace
             // add project namespace here
         ])
     ];

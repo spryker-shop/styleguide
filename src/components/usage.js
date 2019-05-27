@@ -9,8 +9,8 @@ const twigIncludeTemplate = (name, type, moduleName, modifiers, definitions) => 
 + `\n} only %}`;
 
 export default ({ component }) => {
-    const modifiers = getDefault(component.files, [], 'sass.api.modifiers');
-    const definitions = getDefault(component.files, [], 'twig.api.definitions');
+    const modifiers = getDefault(component.files, [], 'sass.api.external.modifiers');
+    const definitions = getDefault(component.files, [], 'twig.api.external.definitions');
 
     return exists(component.files, 'twig.api') && (
         <>

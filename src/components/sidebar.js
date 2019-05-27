@@ -7,7 +7,7 @@ export default class extends React.Component {
     state = {
         active: this.props.location.pathname.replace(/^\//, ''),
         activeAll: false,
-        list: this.props.listOfModules.modules,
+        list: this.props.listOfNavigation,
         searchFilter: '',
     };
 
@@ -24,7 +24,7 @@ export default class extends React.Component {
     toggleClass = (slug, activeClass) => (this.state.active.startsWith(slug) || this.state.activeAll) ? activeClass : '';
 
     filterList = (event) => {
-        const initialList = this.props.listOfModules.modules;
+        const initialList = this.props.listOfNavigation;
         const copyOfList = JSON.parse(JSON.stringify(initialList));
 
         if (event.target.value.length > 0) {
@@ -49,23 +49,96 @@ export default class extends React.Component {
 
     findInArray = (list, search) => {
         return list.filter((item) => {
-            if (this.isMatched(item.moduleName, search)) {
+            if (this.isMatched(item.name, search)) {
                 return true;
             }
 
-            item.types.every((type) => {
-                return type.components = type.components.filter((component) => this.isMatched(component.name, search))
-            });
+            return item.nodes = item.nodes.filter((node) => {
+                if (this.isMatched(node.label, search)) {
+                    return true;
+                }
 
-            return (item.types.some((type) => {
-                return type.components.some((component) => this.isMatched(component.name, search))
-            }));
+                if (node.children) {
+                    return node.children = node.children.filter((children) => {
+                        if (this.isMatched(children.label, search)) {
+                            return true;
+                        }
+                        children.children.every((type) => {
+                            return type.children = type.children.filter((component) => this.isMatched(component.label, search))
+                        });
+
+                        return (children.children.some((type) => {
+                            return type.children.some((component) => this.isMatched(component.label, search))
+                        }));
+                    })
+                }
+
+                return false;
+            });
         });
     };
 
     isMatched = (target, search) => {
         return target.toLowerCase().search(search) !== -1
     };
+
+    isComponentType = (name, node) => {
+        if (name === 'atom' || name === 'molecule' || name === 'organism') {
+            if (node.children.length === 0) {
+                return
+            }
+
+            return (
+                <>
+                    <em className='is-capitalized'>{name}</em>
+
+                    {this.navigationBuilder(node.label, node.children, null, true)}
+                </>
+            )
+        }
+
+        return (
+            <>
+                <button className={`navigation__header ${this.activeHeader(node.slug)}`} onClick={this.activate(node.slug)}>
+                    <Highlighter
+                        highlightClassName='markered'
+                        searchWords={[this.state.searchFilter]}
+                        autoEscape={true}
+                        textToHighlight={name}
+                    />
+                </button>
+
+                {this.navigationBuilder(node.label, node.children, node.slug)}
+            </>
+        )
+    };
+
+    navigationBuilder = (parentName, list, parentSlug, contentResetClasses) => (
+        <ul className={contentResetClasses ? '' : `navigation__content ${this.activeContent(parentSlug)}`}>
+            {list.map(node => (
+                <React.Fragment key={`${parentName}-${node.label}`}>
+                    {exists(node, 'isPage') && (
+                        <li className='navigation__item'>
+                            <Link to={`/${node.slug}`} className='navigation__link' activeClassName='navigation__link--active' onClick={this.toggleSidebar}>
+                                <Highlighter
+                                    highlightClassName='markered'
+                                    searchWords={[this.state.searchFilter]}
+                                    autoEscape={true}
+                                    textToHighlight={node.label}
+                                />
+                            </Link>
+                        </li>
+                    )}
+                    {exists(node, 'hasChildren') && (
+                        <li>
+                            {this.isComponentType(node.label, node)}
+                        </li>
+                    )}
+                </React.Fragment>
+
+            ))}
+        </ul>
+    );
 
     render() {
         const { toggleSidebar, sidebarActiveClass } = this.props;
@@ -77,37 +150,17 @@ export default class extends React.Component {
                         <input className='input' type='text' placeholder='Search' onChange={this.filterList}/>
                     </div>
                     <aside className='navigation'>
-                        {this.state.list.map(module => exists(module, 'types') && (
-                            <div key={module.moduleName}>
-                                <button className={`navigation__header ${this.activeHeader(module.slug)}`} onClick={this.activate(module.slug)}>
+                        {this.state.list.map(element => exists(element, 'nodes') && (
+                            <div key={element.id}>
+                                <button className={`navigation__header ${this.activeHeader(element.slug)}`} onClick={this.activate(element.slug)}>
                                     <Highlighter
                                         highlightClassName='markered'
                                         searchWords={[this.state.searchFilter]}
                                         autoEscape={true}
-                                        textToHighlight={module.moduleName}
+                                        textToHighlight={element.name}
                                     />
                                 </button>
-                                <ul className={`navigation__content ${this.activeContent(module.slug)}`}>
-                                    {module.types.map(type => exists(type, 'components') && (
-                                        <li key={`${module.module}-${type.typeName}`}>
-                                            <em className='is-capitalized'>{type.typeName}</em>
-                                            <ul>
-                                                {type.components.map(component => (
-                                                    <li key={component.name} className='navigation__item'>
-                                                        <Link to={`/${component.slug}`} className='navigation__link' activeClassName='navigation__link--active' onClick={toggleSidebar}>
-                                                            <Highlighter
-                                                                highlightClassName='markered'
-                                                                searchWords={[this.state.searchFilter]}
-                                                                autoEscape={true}
-                                                                textToHighlight={component.name}
-                                                            />
-                                                        </Link>
-                                                    </li>
-                                                ))}
-                                            </ul>
-                                        </li>
-                                    ))}
-                                </ul>
+                                {this.navigationBuilder(element.name, element.nodes, element.slug)}
                             </div>
                         ))}
                     </aside>
