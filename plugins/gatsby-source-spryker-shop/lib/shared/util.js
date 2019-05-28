@@ -3,7 +3,7 @@ const { kebabCase } = require('lodash');
 
 const createSlug = (...fragments) => `${join(...fragments.map(kebabCase))}/`;
 
-const sortStringsBy = (propertyName) => (a, b) => {
+const sortObjectsByProperty = (propertyName) => (a, b) => {
     const nameA = a[propertyName].toLowerCase();
     const nameB = b[propertyName].toLowerCase();
 
@@ -20,5 +20,5 @@ const sortStringsBy = (propertyName) => (a, b) => {
 
 module.exports = {
     createSlug,
-    sortStringsBy
+    sortObjectsByProperty
 };

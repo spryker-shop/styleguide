@@ -11,11 +11,12 @@ const query = `
                 }
             }
         }
-        allSprykerStyleSection {
+        allSprykerStyleFile {
             edges {
                 node {
                     id
                     type
+                    name
                 }
             }
         }
@@ -33,7 +34,7 @@ const query = `
     }
 `;
 
-function createPageDataFromApplicationFile(node) {
+function createPageDataFromApplicationFileNode(node) {
     const slug = createSlug('application', node.name);
 
     return {
@@ -46,12 +47,12 @@ function createPageDataFromApplicationFile(node) {
     }
 }
 
-function createPageDataFromStyleSection(node) {
-    const slug = createSlug('styles', node.type);
+function createPageDataFromStyleFileNode(node) {
+    const slug = createSlug('styles', node.type, node.name);
 
     return {
         path: slug,
-        component: resolve('src/templates/style-section.js'),
+        component: resolve('src/templates/style-file.js'),
         context: {
             id: node.id,
             slug
@@ -59,7 +60,7 @@ function createPageDataFromStyleSection(node) {
     }
 }
 
-function createPageDataFromComponent(node) {
+function createPageDataFromComponentNode(node) {
     const slug = createSlug('components', node.namespace, node.module, node.type, node.name);
 
     return {
@@ -72,21 +73,21 @@ function createPageDataFromComponent(node) {
     }
 }
 
-async function createPages(operations, options) {
+async function createPages(operations) {
     const { graphql } = operations;
     const { createPage } = operations.actions;
     const results = await graphql(query);
 
     results.data.allSprykerApplicationFile.edges
-        .map(edge => createPageDataFromApplicationFile(edge.node))
+        .map(edge => createPageDataFromApplicationFileNode(edge.node))
         .map(pageData => createPage(pageData));
 
-    results.data.allSprykerStyleSection.edges
-        .map(edge => createPageDataFromStyleSection(edge.node))
+    results.data.allSprykerStyleFile.edges
+        .map(edge => createPageDataFromStyleFileNode(edge.node))
         .map(pageData => createPage(pageData));
 
     results.data.allSprykerComponent.edges
-        .map(edge => createPageDataFromComponent(edge.node))
+        .map(edge => createPageDataFromComponentNode(edge.node))
         .map(pageData => createPage(pageData));
 }
 

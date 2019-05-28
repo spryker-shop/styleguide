@@ -1,5 +1,5 @@
 const { groupBy, keys } = require('lodash');
-const { createSlug, sortStringsBy } = require('./shared/util');
+const { createSlug, sortObjectsByProperty } = require('./shared/util');
 
 function createNavigationSectionNode(name, nodes) {
     return {
@@ -21,7 +21,7 @@ function createNavigationNode(label, slug, isPage, children = null) {
     }
 }
 
-function createNavigationNodesFromApplication(applicationFiles, slugBase) {
+function createNavigationNodesFromApplicationFiles(applicationFiles, slugBase) {
     return applicationFiles.map(applicationFile => createNavigationNode(
         applicationFile.name,
         createSlug(slugBase, applicationFile.name),
@@ -29,23 +29,27 @@ function createNavigationNodesFromApplication(applicationFiles, slugBase) {
     ))
 }
 
-function createNavigationNodesFromStyles(styles, slugBase) {
-    return styles.sort(sortStringsBy('type')).map(styleType => {
-        const styles = styleType.files
-            .sort(sortStringsBy('name'))
-            .map(style => createNavigationNode(
-                style.name,
-                createSlug(slugBase, styleType.type, style.name),
-                true,
-            ));
+function createNavigationNodesFromStyleFiles(styleFiles, slugBase) {
+    const stylesByType = groupBy(styleFiles, 'type');
 
-        return createNavigationNode(
-            styleType.type,
-            createSlug(slugBase, styleType.type),
-            false,
-            styles,
-        );
-    });
+    return keys(stylesByType)
+        .sort()
+        .map(typeName => {
+            const styles = stylesByType[typeName]
+                .sort(sortObjectsByProperty('name'))
+                .map(style => createNavigationNode(
+                    style.name,
+                    createSlug(slugBase, typeName, style.name),
+                    true
+                ))
+
+            return createNavigationNode(
+                typeName,
+                createSlug(slugBase, typeName),
+                false,
+                styles
+            )
+        })
 }
 
 function createNavigationNodesFromComponents(components, slugBase) {
@@ -65,7 +69,7 @@ function createNavigationNodesFromComponents(components, slugBase) {
                         .sort()
                         .map(typeName => {
                             const components = componentsByType[typeName]
-                                .sort(sortStringsBy('name'))
+                                .sort(sortObjectsByProperty('name'))
                                 .map(component => createNavigationNode(
                                     component.name,
                                     createSlug(slugBase, namespace, moduleName, typeName, component.name),
@@ -100,7 +104,7 @@ function createNavigationNodesFromComponents(components, slugBase) {
 module.exports = {
     createNavigationNode,
     createNavigationSectionNode,
-    createNavigationNodesFromApplication,
-    createNavigationNodesFromStyles,
+    createNavigationNodesFromApplicationFiles,
+    createNavigationNodesFromStyleFiles,
     createNavigationNodesFromComponents
 };
