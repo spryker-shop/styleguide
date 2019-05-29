@@ -1,8 +1,10 @@
 import React from 'react';
 import { graphql } from 'gatsby';
-import Usage from '../components/usage';
-import Tabs from '../components/api/tabs';
 import { exists } from '../helpers/object';
+import Usage from '../components/usage';
+import Files from '../components/files';
+import Tabs from '../components/api/tabs';
+import Breadcrumb from "../components/breadcrumb";
 
 export const query = graphql`
     query SiteComponentPage($id: String!) {
@@ -24,6 +26,7 @@ export const query = graphql`
                 twig {
                     exists
                     name
+                    path
                     api {
                         external {
                             definitions {
@@ -40,6 +43,7 @@ export const query = graphql`
                 sass {
                     exists
                     name
+                    path
                     api {
                         external {
                             variables {
@@ -69,6 +73,7 @@ export const query = graphql`
                 typescript {
                     exists
                     name
+                    path
                     api {
                         external {
                             classes {
@@ -111,35 +116,28 @@ export default ({ data }) => {
     const component = data.sprykerComponent;
 
     return exists(data, 'sprykerComponent') && (
-        <>
-            <section className="section">
-                <nav className="breadcrumb">
-                    <ul>
-                        <li><span className="breadcrumb__item">{component.namespace}</span></li>
-                        <li><span className="breadcrumb__item">{component.module}</span></li>
-                    </ul>
-                </nav>
+        <section className="section">
+            <Breadcrumb steps={[component.namespace, component.module]} />
+            <h1 className="title is-size-2">
+                {component.name}
+                &nbsp;
+                <span className="tag is-danger is-rounded is-uppercase">{component.type}</span>
+            </h1>
 
-                <h1 className="title is-size-2">
-                    {component.name}
-                    &nbsp;
-                    <span className="tag is-danger is-rounded is-uppercase">{component.type}</span>
-                </h1>
+            {exists(component.isDeprecated, 'exists') && (
+                <h3 className="title is-size-5 has-text-danger">Deprecated</h3>
+            )}
 
-                {exists(component.isDeprecated, 'exists') && (
-                    <h2>Deprecated</h2>
-                )}
+            {exists(component.files, 'readme') && (
+                <article
+                    className="content"
+                    dangerouslySetInnerHTML={{ __html: getReadme(component.name, component.files.readme.content) }}>
+                </article>
+            )}
 
-                {exists(component.files, 'readme') && (
-                    <article
-                        className="content"
-                        dangerouslySetInnerHTML={{ __html: getReadme(component.name, component.files.readme.content) }}>
-                    </article>
-                )}
-
-                <Usage component={component} />
-                <Tabs api={component.files} />
-            </section>
-        </>
+            <Usage component={component} />
+            <Files files={component.files} />
+            <Tabs api={component.files} />
+        </section>
     )
 }

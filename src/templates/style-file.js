@@ -1,6 +1,9 @@
 import React from 'react';
 import { graphql } from 'gatsby';
 import {exists} from "../helpers/object";
+import SassTab from '../components/api/tab-sass';
+import Files from "../components/files";
+import Breadcrumb from '../components/breadcrumb';
 
 export const query = graphql`
     query StylePage($id: String!) {
@@ -8,6 +11,7 @@ export const query = graphql`
             exists
             name
             type
+            path
             api {
                 external {
                     variables {
@@ -21,6 +25,13 @@ export const query = graphql`
                             name
                             value
                         }
+                        comment {
+                            description
+                            tags {
+                                type
+                                description
+                            }
+                        }
                     }
                     modifiers {
                         name
@@ -29,6 +40,14 @@ export const query = graphql`
                         name
                         arguments {
                             name
+                            value
+                        }
+                        comment {
+                            description
+                            tags {
+                                type
+                                description
+                            }
                         }
                     }
                 }
@@ -42,7 +61,12 @@ export default ({ data }) => {
 
     return exists(data, 'sprykerStyleFile') && (
         <section className="section">
-            {section.type}
+            <Breadcrumb steps={[section.type, section.name]} />
+            <h1 className="title is-size-2">
+                {section.name.replace(/(_|\.|[^.]+$)/gi, '')}
+            </h1>
+            <Files files={section} />
+            <SassTab api={section.api.external} />
         </section>
     )
 }

@@ -23,10 +23,31 @@ export default ({ api }) => (
                     {api.mixins.map(mixin => (
                         <li key={mixin.name}>
                             <code>{mixin.name}(
-                                    {exists(mixin, 'arguments') &&
-                                    mixin.arguments.map(argument => `$${argument.name}${argument.value ? ': ' + argument.value : ''}`)
-                                }
-                                )</code>
+                                {exists(mixin, 'arguments') &&
+                                    mixin.arguments.map((argument, index, array) => {
+                                        const separator = array.length > index + 1 ? ', ' : '';
+                                        return `$${argument.name}${argument.value ? ': ' + argument.value + separator : ''}`
+                                    })
+                                })
+                            </code>
+                            {exists(mixin, 'comment') && (
+                                <>
+                                    <p>{mixin.comment.description}</p>
+
+                                    {exists(mixin.comment, 'tags') && (
+                                        <>
+                                            <h6>Tags</h6>
+                                            <ul>
+                                                {mixin.comment.tags.map((tag, index) => (
+                                                    <li key={`${tag.type}-${index}`}>
+                                                        <strong>{tag.type}</strong> {tag.description}
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </>
+                                    )}
+                                </>
+                            )}
                         </li>
                     ))}
                 </ul>
@@ -52,9 +73,30 @@ export default ({ api }) => (
                         <li key={`${functionItem.name}-${index}`}>
                             <code>{functionItem.name}(
                                 {exists(functionItem, 'arguments') &&
-                                functionItem.arguments.map(argument => `$${argument.name}`)
+                                    functionItem.arguments.map((argument, index, array) => {
+                                        const separator = array.length > index + 1 ? ', ' : '';
+                                        return `$${argument.name + separator}`
+                                    })
                                 })
                             </code>
+                            {exists(functionItem, 'comment') && (
+                                <>
+                                    <p>{functionItem.comment.description}</p>
+
+                                    {exists(functionItem.comment, 'tags') && (
+                                        <>
+                                            <h6>Tags</h6>
+                                            <ul>
+                                                {functionItem.comment.tags.map((tag, index) => (
+                                                    <li key={`${tag.type}-${index}`}>
+                                                        <strong>{tag.type}</strong> {tag.description}
+                                                    </li>
+                                                ))}
+                                            </ul>
+                                        </>
+                                    )}
+                                </>
+                            )}
                         </li>
                     ))}
                 </ul>

@@ -63,13 +63,16 @@ export default class extends React.Component {
                         if (this.isMatched(children.label, search)) {
                             return true;
                         }
-                        children.children.every((type) => {
-                            return type.children = type.children.filter((component) => this.isMatched(component.label, search))
-                        });
+                        if (children.children) {
+                            children.children.every((type) => {
+                                return type.children = type.children.filter((component) => this.isMatched(component.label, search))
+                            });
 
-                        return (children.children.some((type) => {
-                            return type.children.some((component) => this.isMatched(component.label, search))
-                        }));
+                            return (children.children.some((type) => {
+                                return type.children.some((component) => this.isMatched(component.label, search))
+                            }));
+                        }
+                        return false;
                     })
                 }
 
@@ -83,11 +86,11 @@ export default class extends React.Component {
     };
 
     isComponentType = (name, node) => {
-        if (name === 'atom' || name === 'molecule' || name === 'organism') {
-            if (node.children.length === 0) {
-                return
-            }
+        if (node.children.length === 0) {
+            return
+        }
 
+        if (name === 'atom' || name === 'molecule' || name === 'organism') {
             return (
                 <>
                     <em className='is-capitalized'>{name}</em>

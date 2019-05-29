@@ -304,3 +304,17 @@ pre {
 .markered {
     background-color: #ffff00;
 }
+
+.files {
+    &__button {
+        margin: 0 0 0.5rem 1rem;
+
+        &--twig {
+            margin-left: 1.14rem;
+        }
+
+        &--ts {
+            margin-left: 2.22rem;
+        }
+    }
+}
