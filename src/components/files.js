@@ -1,6 +1,9 @@
 import React from 'react';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 import {exists} from "../helpers/object";
+import IconCopy from "../icons/copy.svg";
+import IconPHPStorm from "../icons/phpstorm.svg";
+import IconVSCode from "../icons/visual-studio-code.svg";
 
 export default class extends React.Component {
     parsePath = (path) => {
@@ -15,12 +18,15 @@ export default class extends React.Component {
                 <button
                     className={`button is-small files__button files__button--${name.replace(/[A-z-]+\./gi, '')}`}
                     title="Copy path of the file">
-                    <svg className="icon" viewBox="0 0 24 24">
-                        <path
-                            d="M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z"/>
-                    </svg>
+                    <IconCopy className="icon" />
                 </button>
             </CopyToClipboard>
+            <a href={`phpstorm://open?file=${path}`} className="button is-small files__button files__button--second" title="Open the file in PhpStorm">
+                <IconPHPStorm className="icon" />
+            </a>
+            <a href={`vscode://file/${path}`} className="button is-small files__button files__button--second" title="Open the file in Visual Studio Code">
+                <IconVSCode className="icon" />
+            </a>
         </li>
     );
 

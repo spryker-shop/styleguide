@@ -316,5 +316,19 @@ pre {
         &--ts {
             margin-left: 2.22rem;
         }
+
+        &--second {
+            margin-left: 0.5rem;
+        }
+    }
+}
+
+.content {
+    li + li {
+        margin-top: 1rem;
+    }
+
+    code + p {
+        margin-top: 0.25rem;
     }
 }

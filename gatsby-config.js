@@ -32,6 +32,14 @@ module.exports = {
             }
         },
         {
+            resolve: "gatsby-plugin-react-svg",
+            options: {
+                rule: {
+                    include: /icons/
+                }
+            }
+        },
+        {
             resolve: 'gatsby-source-spryker-shop',
             options: {
                 projectRootAbsolutePath: '/Users/ilmente/Dev/suite-nonsplit/project'
