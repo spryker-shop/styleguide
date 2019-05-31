@@ -11,7 +11,7 @@ export default ({ api }) => (
                     {exists(singleClass, 'tags') && (
                         <>
                             <h6>Tags</h6>
-                            <ul>
+                            <ul className="list-marked">
                                 {singleClass.tags.map((tag, index) => (
                                     <li key={`${tag.name}-${index}`}>
                                         <strong>{tag.name}</strong>
@@ -24,19 +24,13 @@ export default ({ api }) => (
                     )}
 
                     {exists(singleClass, 'methods') && (
-                        <>
-                            <h6>Methods</h6>
-                            <ListTypescriptDescription list={singleClass.methods}/>
-                        </>
+                        <ListTypescriptDescription title='Methods' list={singleClass.methods}/>
                     )}
                 </div>
             ))
         )}
         {exists(api, 'functions') && (
-            <>
-                <h6>Functions</h6>
-                <ListTypescriptDescription list={api.functions}/>
-            </>
+            <ListTypescriptDescription title='Functions' list={api.functions}/>
         )}
     </div>
 )

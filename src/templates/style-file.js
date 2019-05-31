@@ -12,6 +12,7 @@ export const query = graphql`
             name
             type
             path
+            relativePath
             api {
                 external {
                     variables {
@@ -32,6 +33,9 @@ export const query = graphql`
                                 description
                             }
                         }
+                    }
+                    classes {
+                        name
                     }
                     modifiers {
                         name

@@ -6,18 +6,13 @@ import IconPHPStorm from "../icons/phpstorm.svg";
 import IconVSCode from "../icons/visual-studio-code.svg";
 
 export default class extends React.Component {
-    parsePath = (path) => {
-        const startIndex = path.indexOf('project');
-        return `/${path.slice(startIndex)}`;
-    };
-
-    listItem = (name, path) => (
+    listItem = (name, path, relativePath) => (
         <li key={name}>
             {name}
-            <CopyToClipboard text={this.parsePath(path)}>
+            <CopyToClipboard text={relativePath}>
                 <button
                     className={`button is-small files__button files__button--${name.replace(/[A-z-]+\./gi, '')}`}
-                    title="Copy path of the file">
+                    title="Copy the file path">
                     <IconCopy className="icon" />
                 </button>
             </CopyToClipboard>
@@ -31,23 +26,23 @@ export default class extends React.Component {
     );
 
     render() {
-        const {twig, sass, typescript, name, path} = this.props.files;
+        const {twig, sass, typescript, name, path, relativePath} = this.props.files;
         const listOfFiles = [twig, sass, typescript];
 
         return (
             <div className="content files">
                 <h3 className="title is-size-4">Files</h3>
-                <ul>
+                <ul className="list-marked">
                     {exists(this.props.files, 'twig') && (
                         listOfFiles.map((file) => {
                             if (!file.exists) {
                                 return false;
                             }
 
-                            return this.listItem(file.name, file.path)
+                            return this.listItem(file.name, file.path, file.relativePath)
                         }
                     ))}
-                    {exists(this.props.files, 'exists') && (this.listItem(name, path))}
+                    {exists(this.props.files, 'exists') && (this.listItem(name, path, relativePath))}
                 </ul>
             </div>
         )

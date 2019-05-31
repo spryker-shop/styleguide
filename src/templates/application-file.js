@@ -11,6 +11,7 @@ export const query = graphql`
             exists
             name
             path
+            relativePath
             api {
                 external {
                     classes {

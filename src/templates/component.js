@@ -27,6 +27,7 @@ export const query = graphql`
                     exists
                     name
                     path
+                    relativePath
                     api {
                         external {
                             definitions {
@@ -44,6 +45,7 @@ export const query = graphql`
                     exists
                     name
                     path
+                    relativePath
                     api {
                         external {
                             variables {
@@ -61,12 +63,6 @@ export const query = graphql`
                             modifiers {
                                 name
                             }
-                            functions {
-                                name
-                                arguments {
-                                    name
-                                }
-                            }
                         }
                     }
                 }
@@ -74,6 +70,7 @@ export const query = graphql`
                     exists
                     name
                     path
+                    relativePath
                     api {
                         external {
                             classes {

@@ -19,7 +19,7 @@ export default ({ api }) => (
         {exists(api, 'blocks') && (
             <>
                 <h6>Blocks</h6>
-                <ul>
+                <ul className="list-marked">
                     {api.blocks.map((block, index) => (
                         <li key={`${block.name}-${index}`}>{block.name}</li>
                     ))}
