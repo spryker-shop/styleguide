@@ -1,4 +1,4 @@
-const { analyze } = require('@spryker/frontend-sniffer/api');
+const { collect } = require('@spryker/frontend-sniffer/api');
 const {
     createNavigationSectionNode,
     createNavigationNodesFromStyleFiles,
@@ -28,7 +28,7 @@ function createNodeData(operations, type, id, entity) {
 
 async function sourceNodes(operations, options) {
     const { createNode } = operations.actions;
-    const { applicationFiles, styleFiles, components } = await analyze();
+    const { applicationFiles, styleFiles, components } = await collect();
 
     const navigation = [
         createNavigationSectionNode(SECTIONS.application, createNavigationNodesFromApplicationFiles(applicationFiles, SECTIONS.application)),

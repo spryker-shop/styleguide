@@ -1,11 +1,11 @@
-# Spryker Shop Styleguide
+# Spryker Shop Living Styleguide
 
-This repository contains an *alpha* version of Spryker Shop Styleguide.
+This repository contains the Spryker Shop Living Styleguide.
 The application is based on [GatsbyJS](https://www.gatsbyjs.org/).
 
 ## Requirements
 
-Use `yarn` instead of `npm` as recommended by GatsbyJS.
+Prefer `yarn` over `npm`, as recommended by GatsbyJS.
 Tested on `node` version 8.11 (see `.nvmrc` file in the repo).
 
 ## Installation
@@ -22,8 +22,7 @@ Go to `./gatsby-config.js`:
     {
       resolve: 'gatsby-source-spryker-shop',
       options: {
-        projectRootAbsolutePath: '/absolute/path/to/suite/project', // change this property
-        componentPageTemplateRelativePath: 'src/templates/component.js'
+        projectRootAbsolutePath: '/absolute/path/to/suite/project' // change this property
       }
     }
 ```
@@ -39,7 +38,7 @@ yarn run watch # will transpile the code for every change
 
 ## Navigate the styleguide
 
-Go to `./`:
+Go to main gatby folder `./`:
 
 ```bash
 yarn run develop
