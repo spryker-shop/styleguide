@@ -42,7 +42,14 @@ module.exports = {
         {
             resolve: 'gatsby-source-spryker-shop',
             options: {
-                projectRootAbsolutePath: '/Users/ilmente/Dev/suite-nonsplit/project'
+                // Spryker project path, it can be absolute and relative
+                projectPath: '../suite-nonsplit/project',
+
+                // number, limits the collecto to [n]
+                collectOnly: null,
+
+                // enable debug mode
+                debugMode: false
             }
         }
     ]

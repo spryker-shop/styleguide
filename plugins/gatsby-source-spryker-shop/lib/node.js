@@ -1,4 +1,4 @@
-const { collect } = require('@spryker/frontend-sniffer/api');
+const { environment, collect } = require('@spryker/frontend-sniffer/api');
 const {
     createNavigationSectionNode,
     createNavigationNodesFromStyleFiles,
@@ -28,6 +28,17 @@ function createNodeData(operations, type, id, entity) {
 
 async function sourceNodes(operations, options) {
     const { createNode } = operations.actions;
+
+    const isValid = environment.update({
+        projectPath: options.projectPath,
+        collectOnly: options.collectOnly,
+        debugMode: options.debugMode
+    })
+
+    if (!isValid) {
+        return Promise.reject('frontent-sniffer collector aborted');
+    }
+
     const { applicationFiles, styleFiles, components } = await collect();
 
     const navigation = [
