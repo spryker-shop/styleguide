@@ -30,8 +30,8 @@ async function sourceNodes(operations, options) {
     const { createNode } = operations.actions;
 
     const isValid = environment.update({
-        projectPath: options.projectPath,
-        collectOnly: options.collectOnly,
+        path: options.projectPath,
+        only: options.only,
         debugMode: options.debugMode
     })
 

@@ -1,12 +1,11 @@
 {
   "name": "gatsby-source-spryker-shop",
   "version": "0.1.0",
-  "description": "",
   "main": "index.js",
   "author": "Spryker Systems GmbH",
   "license": "MIT",
   "dependencies": {
-    "@spryker/frontend-sniffer": "https://github.com/spryker-sdk/frontend-sniffer",
+    "@spryker/frontend-sniffer": "git+https://github.com/spryker-sdk/frontend-sniffer.git#semver:^0.1.0",
     "lodash": "^4.17.11"
   }
 }
