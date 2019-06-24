@@ -118,8 +118,8 @@ export default class extends React.Component {
 
     navigationBuilder = (parentName, list, parentSlug, contentResetClasses) => (
         <ul className={contentResetClasses ? '' : `navigation__content ${this.activeContent(parentSlug)}`}>
-            {list.map(node => (
-                <React.Fragment key={`${parentName}-${node.label}`}>
+            {list.map((node, index) => (
+                <React.Fragment key={`${parentName}-${node.label}-${index}`}>
                     {exists(node, 'isPage') && (
                         <li className='navigation__item'>
                             <Link to={`/${node.slug}`} className='navigation__link' activeClassName='navigation__link--active' onClick={this.toggleSidebar}>
