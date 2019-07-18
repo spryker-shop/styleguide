@@ -26,6 +26,17 @@ function createNodeData(operations, type, id, entity) {
     }
 }
 
+const conversionObjectToArrayCollection = collection => {
+    const modules = Object.values(collection.core);
+    const collectionOfFiles = [];
+    for (let module of modules) {
+        collectionOfFiles.push(...Object.values(module).reduce(
+            (accumulator, current) => [...accumulator, ...current], []
+        ));
+    }
+    return collectionOfFiles;
+};
+
 async function sourceNodes(operations, options) {
     const { createNode } = operations.actions;
 
@@ -33,27 +44,24 @@ async function sourceNodes(operations, options) {
         path: options.projectPath,
         only: options.only,
         debugMode: options.debugMode
-    })
+    });
 
     if (!isValid) {
         return Promise.reject('frontent-sniffer collector aborted');
     }
 
-    const { applicationFiles, styleFiles, components } = await collect();
+    const { applicationFiles, styleFiles, modules } = await collect();
 
     const navigation = [
         createNavigationSectionNode(SECTIONS.application, createNavigationNodesFromApplicationFiles(applicationFiles, SECTIONS.application)),
-        createNavigationSectionNode(SECTIONS.styles, createNavigationNodesFromStyleFiles(styleFiles, SECTIONS.styles)),
-        createNavigationSectionNode(SECTIONS.components, [
-            ...createNavigationNodesFromComponents(components, SECTIONS.components) // SprykerShop namespace
-            // add project namespace here
-        ])
+        createNavigationSectionNode(SECTIONS.styles, createNavigationNodesFromStyleFiles(styleFiles.core, SECTIONS.styles)),
+        createNavigationSectionNode(SECTIONS.components, createNavigationNodesFromComponents(conversionObjectToArrayCollection(modules), SECTIONS.components))
     ];
 
     const nodesData = [
         ...applicationFiles.map(file => createNodeData(operations, 'SprykerApplicationFile', file.path, file)),
-        ...styleFiles.map(file => createNodeData(operations, 'SprykerStyleFile', file.path, file)),
-        ...components.map(component => createNodeData(operations, 'SprykerComponent', component.id, component)),
+        ...styleFiles.core.map(file => createNodeData(operations, 'SprykerStyleFile', file.path, file)),
+        ...conversionObjectToArrayCollection(modules).map(component => createNodeData(operations, 'SprykerComponent', component.id, component)),
         ...navigation.map(node => createNodeData(operations, 'SprykerNavigation', node.name, node))
     ];
 
