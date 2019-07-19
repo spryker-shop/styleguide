@@ -9,7 +9,7 @@ const {
 const SECTIONS = {
     application: 'Application',
     styles: 'Styles',
-    components: 'Components',
+    namespaces: 'Namespaces',
 };
 
 function createNodeData(operations, type, id, entity) {
@@ -55,7 +55,7 @@ async function sourceNodes(operations, options) {
     const navigation = [
         createNavigationSectionNode(SECTIONS.application, createNavigationNodesFromApplicationFiles(applicationFiles, SECTIONS.application)),
         createNavigationSectionNode(SECTIONS.styles, createNavigationNodesFromStyleFiles(styleFiles.core, SECTIONS.styles)),
-        createNavigationSectionNode(SECTIONS.components, createNavigationNodesFromComponents(conversionObjectToArrayCollection(modules), SECTIONS.components))
+        createNavigationSectionNode(SECTIONS.namespaces, createNavigationNodesFromComponents(conversionObjectToArrayCollection(modules), SECTIONS.namespaces))
     ];
 
     const nodesData = [

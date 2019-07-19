@@ -26,5 +26,7 @@ export default ({ api }) => (
                 </ul>
             </>
         )}
+
+        {(!exists(api, 'definitions') && !exists(api, 'blocks')) && <h6>No external API</h6>}
     </div>
 )

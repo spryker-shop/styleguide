@@ -382,3 +382,17 @@ pre {
     vertical-align: middle;
     border: 1px solid whitesmoke;
 }
+
+.title {
+    &--flex {
+        display: flex;
+    }
+}
+
+.icon {
+    fill: currentColor;
+
+    &--inline {
+        margin-right: 0.5rem;
+    }
+}
