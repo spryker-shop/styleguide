@@ -85,12 +85,23 @@ export default class extends React.Component {
         return target.toLowerCase().search(search) !== -1
     };
 
-    isComponentType = (name, node) => {
-        if (node.children.length === 0) {
+    isSubItem = name => {
+        const namesOfSubItems = [
+            'atom',
+            'molecule',
+            'organism',
+            'view',
+            'template',
+        ];
+        return namesOfSubItems.some(item => item === name);
+    };
+
+    getNestedItem = (name, node) => {
+        if (!node.children.length) {
             return
         }
 
-        if (name === 'atom' || name === 'molecule' || name === 'organism') {
+        if (this.isSubItem(name)) {
             return (
                 <>
                     <em className='is-capitalized'>{name}</em>
@@ -134,7 +145,7 @@ export default class extends React.Component {
                     )}
                     {exists(node, 'hasChildren') && (
                         <li>
-                            {this.isComponentType(node.label, node)}
+                            {this.getNestedItem(node.label, node)}
                         </li>
                     )}
                 </React.Fragment>

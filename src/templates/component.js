@@ -5,6 +5,7 @@ import Usage from '../components/usage';
 import Files from '../components/files';
 import Tabs from '../components/api/tabs';
 import Breadcrumb from "../components/breadcrumb";
+import IconAlert from "../icons/attention.svg";
 
 export const query = graphql`
     query SiteComponentPage($id: String!) {
@@ -121,9 +122,12 @@ export default ({ data }) => {
                 <span className="tag is-danger is-rounded is-uppercase">{component.type}</span>
             </h1>
 
-            {exists(component.isDeprecated, 'exists') && (
-                <h3 className="title is-size-5 has-text-danger">Deprecated</h3>
-            )}
+            {component.isDeprecated &&
+                <h3 className="title title--flex is-size-5 has-text-danger">
+                    <IconAlert className="icon icon--inline" />
+                    Deprecated
+                </h3>
+            }
 
             {exists(component.files, 'readme') && (
                 <article
@@ -132,7 +136,7 @@ export default ({ data }) => {
                 </article>
             )}
 
-            <Usage component={component} />
+            {(component.type !== 'view' && component.type !== 'template') && <Usage component={component} />}
             <Files files={component.files} />
             <Tabs api={component.files} />
         </section>

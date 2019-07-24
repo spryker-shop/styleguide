@@ -52,7 +52,7 @@ export default class extends React.Component {
         return 'is-hidden';
     };
 
-    filterTabs = (tabs) => tabs.filter(tab => tab.content.exists);
+    filterTabs = tabs => tabs.filter(tab => tab.content !== null ? tab.content.exists : false);
 
     mapContentComponents = (name, api) => {
         const TagName = this.components[name.toLowerCase()];
@@ -81,7 +81,7 @@ export default class extends React.Component {
 
                 <div className="tabs">
                     <ul>
-                        {this.filterTabs(tabList).map((tab) => (
+                        {this.filterTabs(tabList).map(tab => (
                             <li key={tab.name} className={this.currentTabLabel(tab.name)}><button className="tabs__button" onClick={this.showTab(tab.name)}>{tab.name}</button></li>
                         ))}
                     </ul>

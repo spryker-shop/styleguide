@@ -21,10 +21,12 @@ export default ({ api }) => (
                 <h6>Blocks</h6>
                 <ul className="list-marked">
                     {api.blocks.map((block, index) => (
-                        <li key={`${block.name}-${index}`}>{block.name}</li>
+                        block && <li key={`${block.name}-${index}`}>{block.name}</li>
                     ))}
                 </ul>
             </>
         )}
+
+        {(!exists(api, 'definitions') && !exists(api, 'blocks')) && <h6>No external API</h6>}
     </div>
 )

@@ -2,7 +2,6 @@ import React from 'react'
 
 export default () => (
     <section className="section content">
-        <h1>Hi folks!</h1>
-        <p>Welcome to your new Spryker Styleguide POC.</p>
+        <h1>Spryker Atomic Frontend Living Styleguide</h1>
     </section>
 )

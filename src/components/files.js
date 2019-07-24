@@ -34,8 +34,8 @@ export default class extends React.Component {
                 <h3 className="title is-size-4">Files</h3>
                 <ul className="list-marked">
                     {exists(this.props.files, 'twig') && (
-                        listOfFiles.map((file) => {
-                            if (!file.exists) {
+                        listOfFiles.map(file => {
+                            if (file === null || !file.exists) {
                                 return false;
                             }
 

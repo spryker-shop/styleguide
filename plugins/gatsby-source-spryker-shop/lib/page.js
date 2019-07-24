@@ -61,7 +61,7 @@ function createPageDataFromStyleFileNode(node) {
 }
 
 function createPageDataFromComponentNode(node) {
-    const slug = createSlug('components', node.namespace, node.module, node.type, node.name);
+    const slug = createSlug('namespaces', node.namespace, node.module, node.type, node.name);
 
     return {
         path: slug,
