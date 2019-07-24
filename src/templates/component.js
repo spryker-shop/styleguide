@@ -5,7 +5,7 @@ import Usage from '../components/usage';
 import Files from '../components/files';
 import Tabs from '../components/api/tabs';
 import Breadcrumb from "../components/breadcrumb";
-import IconAllert from "../icons/attention.svg";
+import IconAlert from "../icons/attention.svg";
 
 export const query = graphql`
     query SiteComponentPage($id: String!) {
@@ -124,7 +124,7 @@ export default ({ data }) => {
 
             {component.isDeprecated &&
                 <h3 className="title title--flex is-size-5 has-text-danger">
-                    <IconAllert className="icon icon--inline" />
+                    <IconAlert className="icon icon--inline" />
                     Deprecated
                 </h3>
             }
