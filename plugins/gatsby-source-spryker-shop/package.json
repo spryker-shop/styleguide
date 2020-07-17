@@ -6,6 +6,6 @@
   "license": "MIT",
   "dependencies": {
     "@spryker/frontend-sniffer": "git+https://github.com/spryker-sdk/frontend-sniffer.git#semver:^0.1.0",
-    "lodash": "^4.17.15"
+    "lodash": "^4.17.19"
   }
 }
