@@ -18,7 +18,7 @@
     "ramda": "^0.26.1",
     "sassdoc": "^2.5.1",
     "sast": "^0.7.0",
-    "showdown": "^1.9.0",
+    "showdown": "^1.9.1",
     "typescript": "~3.2.1",
     "unist-util-filter": "^1.0.0",
     "unist-util-find": "^1.0.1",
