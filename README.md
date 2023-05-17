@@ -1,3 +1,7 @@
+*DEPRECATED!*
+
+Will be removed in 2024.
+
 # Spryker Shop Styleguide
 
 This repository contains an *alpha* version of Spryker Shop Styleguide.
