@@ -1,4 +1,5 @@
 *DEPRECATED!*
+
 Will be removed in 2024.
 
 # Spryker Shop Styleguide
